@@ -153,10 +153,6 @@ default_lang: en
 
 Set `BACKPLANE_CONFIG_FILE` to load a YAML file. Backplane's own settings use `BACKPLANE_*`, including `BACKPLANE_INTERNAL_SECRET`, discovery and event transport addresses; supply those for the target installation. Don't expose the development database password or internal secret on an untrusted network.
 
-## Transaction cancellation limitation
-
-The SDK's current `pgtx` / `go-transaction-manager` dependency can leave a PostgreSQL pool connection acquired when a transaction's context is cancelled. A cancelled operation can therefore exhaust pool capacity over time or block graceful pool shutdown. Transactional rollback and ordinary SQL-error paths are tested, but they do not establish cancellation-safe resource cleanup. This needs an upstream dependency fix; this service does not replace the SDK's transaction manager or add a custom rollback loop. The lock-contention integration test uses PostgreSQL `lock_timeout`, not context cancellation.
-
 ## Development
 
 Go tool versions match the reference services: golangci-lint `v2.11.3`, sqld `v1.1.10`, easyp `v0.16.6`, protoc-gen-go `v1.36.11` and protoc-gen-go-grpc `v1.6.2`. Tools install into `bin/`; use Node 22 and Yarn Classic `1.22.22`. Console packages require GitHub Packages read access.
