@@ -1,0 +1,100 @@
+syntax = "proto3";
+package legal.console.v1;
+option go_package = "github.com/backplane-labs/backplane-legal/proto/legal/console/v1;legalconsolev1";
+
+// AdminService is the internal, operator-authenticated legal console API.
+service AdminService {
+  rpc ListDocuments(ListDocumentsRequest) returns (ListDocumentsResponse);
+  rpc CreateDocument(CreateDocumentRequest) returns (CreateDocumentResponse);
+  rpc GetVersions(GetVersionsRequest) returns (GetVersionsResponse);
+  rpc SaveDraft(SaveDraftRequest) returns (SaveDraftResponse);
+  rpc Publish(PublishRequest) returns (PublishResponse);
+  rpc Journal(JournalRequest) returns (JournalResponse);
+  rpc Verify(VerifyRequest) returns (VerifyResponse);
+  rpc Export(ExportRequest) returns (ExportResponse);
+  rpc Preview(PreviewRequest) returns (PreviewResponse);
+}
+// Document holds stable document policy.
+message Document {
+  string slug = 1;
+  string audience = 2;
+  bool required = 3;
+  string default_lang = 4;
+}
+// Text is a language's exact evidence text.
+message Text {
+  string lang = 1;
+  string title = 2;
+  string body = 3;
+  string url = 4;
+  string content_hash = 5;
+}
+// Version is an editable draft or immutable publication.
+message Version {
+  string document = 1;
+  int64 number = 2;
+  // RFC 3339 timestamp.
+  string effective_at = 3;
+  string change_note = 4;
+  string status = 5;
+  repeated Text texts = 6;
+}
+message ListDocumentsRequest { string audience = 1; }
+message ListDocumentsResponse { repeated Document documents = 1; }
+message CreateDocumentRequest { Document document = 1; }
+message CreateDocumentResponse {}
+message GetVersionsRequest { string document = 1; }
+message GetVersionsResponse { repeated Version versions = 1; }
+message SaveDraftRequest { Version version = 1; }
+message SaveDraftResponse { Version version = 1; }
+message PublishRequest {
+  string document = 1;
+  int64 number = 2;
+}
+message PublishResponse { Version version = 1; }
+// Filter uses inclusive RFC 3339 server-time bounds; empty means unbounded.
+message Filter {
+  string subject = 1;
+  string document = 2;
+  int64 version = 3;
+  string from = 4;
+  string to = 5;
+}
+// Record is one append-only evidence entry.
+message Record {
+  string id = 1;
+  int64 seq = 2;
+  string subject = 3;
+  string document = 4;
+  int64 version = 5;
+  string lang = 6;
+  string content_hash = 7;
+  string kind = 8;
+  string accepted_at = 9;
+  map<string, string> context = 10;
+  string prev_hash = 11;
+  string hash = 12;
+}
+message JournalRequest { Filter filter = 1; }
+message JournalResponse { repeated Record records = 1; }
+message VerifyRequest {
+  int64 from = 1;
+  int64 to = 2;
+}
+message VerifyResponse {
+  bool ok = 1;
+  int64 broken_seq = 2;
+  int64 checked = 3;
+}
+message ExportRequest {
+  Filter filter = 1;
+  // csv or json.
+  string format = 2;
+}
+message ExportResponse {
+  bytes data = 1;
+  string content_type = 2;
+  string filename = 3;
+}
+message PreviewRequest { string markdown = 1; }
+message PreviewResponse { string html = 1; }
