@@ -40,6 +40,9 @@ bindings:
             flow_id: req.flow_id
             method: req.method
             user_agent: "has(req.request_headers) && 'User-Agent' in req.request_headers ? req.request_headers['User-Agent'] : ''"
-            ip: "has(req.request_headers) && 'X-Forwarded-For' in req.request_headers ? req.request_headers['X-Forwarded-For'] : ''"
+            # The right-most X-Forwarded-For hop: the one your edge proxy
+            # appended. The hops left of it are the client's to write.
+            # Behind more proxies of your own, count that many from the right.
+            ip: "has(req.request_headers) && 'X-Forwarded-For' in req.request_headers ? req.request_headers['X-Forwarded-For'].split(',')[size(req.request_headers['X-Forwarded-For'].split(',')) - 1].trim() : ''"
     result:
       deny: "checked.ok ? dyn(null) : dyn({'messages': [{'id': 4000901, 'text': 'Accept the required documents to register.'}]})"
