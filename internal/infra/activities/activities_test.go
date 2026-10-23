@@ -26,6 +26,10 @@ func (cases) Accept(_ context.Context, in domain.AcceptInput) ([]domain.Record, 
 	return []domain.Record{{Subject: in.Subject, Context: in.Context}}, nil
 }
 
+func (cases) Check(_ context.Context, _ string, items []domain.Item) (domain.CheckResult, error) {
+	return domain.CheckResult{OK: len(items) > 0}, nil
+}
+
 func (cases) Withdraw(_ context.Context, in domain.WithdrawInput) (domain.Record, error) {
 	return domain.Record{Subject: in.Subject, Context: in.Context}, nil
 }
@@ -53,7 +57,7 @@ func TestActivityPayloadsAndMetadata(t *testing.T) {
 	h.Start()
 
 	manifest := h.Manifest()
-	if len(manifest.GetActivities()) != 7 || len(manifest.GetEvents()) != 0 || len(manifest.GetHooks()) != 0 {
+	if len(manifest.GetActivities()) != 8 || len(manifest.GetEvents()) != 0 || len(manifest.GetHooks()) != 0 {
 		t.Fatalf("unexpected contract: %v", manifest)
 	}
 
@@ -62,7 +66,7 @@ func TestActivityPayloadsAndMetadata(t *testing.T) {
 		names[entry.GetName()] = true
 	}
 
-	for _, name := range []string{"Pending", "Accept", "Withdraw", "GetDocument", "ListDocuments", "Acceptances", "Verify"} {
+	for _, name := range []string{"Pending", "Accept", "Check", "Withdraw", "GetDocument", "ListDocuments", "Acceptances", "Verify"} {
 		if !names[name] {
 			t.Errorf("missing activity %s", name)
 		}

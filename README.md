@@ -21,7 +21,8 @@ Inputs use JSON field names. `subject` is an opaque identifier chosen by the cal
 | Activity | Input and behavior |
 | --- | --- |
 | `legal.Pending` | `{subject, audience?, lang?}`. Current documents the subject hasn't accepted, including selected text, policy, languages, change note and `previous_accepted`. Check at sign-in or another application boundary, not on every request. |
-| `legal.Accept` | `{subject, items: [{document, version, lang}], context?}`. Atomically accepts every supplied item; requires the exact current effective publication and an available language. An already-accepted `(subject, document, version)` returns its existing record without appending or emitting another event. |
+| `legal.Accept` | `{subject, items: [{document, version, lang}], context?}`. Atomically accepts every supplied item; requires a published version already in effect (not necessarily the current one) and an available language. An already-accepted `(subject, document, version)` returns its existing record without appending or emitting another event. |
+| `legal.Check` | `{audience, items: [{document, version, lang}]}`. Writes nothing; returns `{ok, missing, rejected}`: the required current documents of the audience no item covers (registration includes the installation-wide ones) and the items naming no published, effective text. What a registration flow checks before the identity is created. |
 | `legal.Withdraw` | `{subject, document, context?}`. Appends a withdrawal for an optional consent; rejects required documents and a subject with no acceptance. Repeating a withdrawal returns the existing withdrawal. A later acceptance appends new evidence. |
 | `legal.GetDocument` | `{slug, version?, lang?}`. Selects a published, effective text; without a version, selects the current one. Historical effective publications remain readable. |
 | `legal.ListDocuments` | `{audience?, lang?}`. Current effective publications; documents without one don't appear. |
@@ -106,30 +107,41 @@ Run `Verify` against the live journal before exporting evidence. Verification ch
 
 CSV and JSON exports include every evidence field and both hashes. A filtered export naturally contains gaps from unrelated subjects or documents and cannot independently prove whole-chain completeness. Retain the relevant published text and, for independent chain checking, the full journal and trusted head/checkpoint. CSV preserves raw strings rather than adding spreadsheet prefixes; import it as data with formula evaluation disabled, not by opening untrusted cells as formulas.
 
-## Registration wiring: limits and examples
+## Registration
 
-`deployments/wiring/legal-kratos.yaml` contains commented examples, not a ready-made registration policy. Review the Kratos adapter's [hook contract](https://github.com/backplane-labs/backplane-kratos#example-wiring) before publishing bindings individually through Wiring.
+`deployments/wiring/legal-kratos.yaml` makes registration require the
+installation's documents; put it in `BACKPLANE_WIRING_DIR` next to
+backplane-kratos and legal.
 
-`kratos.BeforeRegistration` runs while Kratos initializes a flow, before the user submits acceptance choices. Its `FlowIn` can carry flow metadata, but no persisted identity or completed submission. The only honest before-hook example without another policy capability is fail-closed: deny every registration until the installation supplies proper validation. The example file includes that disabled binding; don't enable it expecting consent checkboxes to unblock it.
+The registration form shows the documents of audience `registration`
+(`legal.Pending` / `legal.ListDocuments`, or the public API) and sends the
+subject's choices as `transient_payload.legal_acceptances: [{document,
+version, lang}]` — with every method, password and OIDC alike.
 
-`kratos.AfterRegistration` exposes `req.identity.id` and `req.transient_payload`, but Kratos hasn't stored the identity yet. A partial binding can record supplied choices:
+`kratos.AfterRegistration` runs before Kratos stores the identity, and Kratos
+waits for its answer:
 
-```yaml
-hook: kratos.AfterRegistration
-steps:
-  accepted:
-    activity: legal.Accept
-    input:
-      subject: req.identity.id
-      items: req.transient_payload.legal_acceptances
-      context:
-        channel: "'registration'"
-result: {}
-```
+1. `legal.Check{audience: registration, items}` reports whether the choices
+   cover every required current document; it writes nothing.
+2. Only when they do, `legal.Accept` records them with the identity's id —
+   already final — as the subject, and the channel, flow, method, client IP
+   and user agent as context.
+3. Otherwise the flow is denied with a message on the form.
 
-The caller must send `transient_payload.legal_acceptances` as `[{document, version, lang}]`, with integer versions. Don't enable this in isolation as a required-consent guard: it doesn't prove that the list covers every required document in both audiences. It can also leave evidence for an identity whose registration later fails. Hook errors stop the flow by default; adding registration to the adapter's `fail_open` setting would weaken that protection.
+So no identity is created without its evidence: if legal is unreachable the
+hook fails and Kratos stops the flow. Keep `kratos.AfterRegistration` out of
+backplane-kratos's `fail_open`. The converse is possible and harmless: when
+Kratos fails to store the identity after the hook (an address already
+taken), the journal keeps a truthful acceptance by an id that never became an
+identity.
 
-A complete integration needs validation at a submitted-data hook, including required-current-version coverage, and an explicit decision about when identity persistence and evidence recording occur. The current legal activities don't expose a validation-only operation. `kratos.Registered` describes completed registration, but its event contract doesn't carry the transient acceptance list, so replacing the hook with that event doesn't solve the evidence handoff. No unsupported hook or synthetic activity appears in the example.
+`legal.Accept` takes any published version already in effect, not only the
+current one: a subject accepts the text it was shown even if a newer version
+took effect a moment later, and `legal.Pending` asks for that one next. A
+draft or a version not in effect yet is refused.
+
+Users who registered before a new version are asked at sign-in:
+`legal.Pending`, then `legal.Accept` with `channel: reaccept`.
 
 ## Configuration
 

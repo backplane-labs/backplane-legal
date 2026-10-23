@@ -2,7 +2,6 @@ package store_test
 
 import (
 	"context"
-	"errors"
 	"testing"
 	"time"
 
@@ -91,7 +90,9 @@ func testPublicationLock(t *testing.T, service *app.Service, repo *store.Store, 
 		t.Fatal(err)
 	}
 
-	if _, err = service.Accept(t.Context(), domain.AcceptInput{Subject: uuid.NewString(), Items: []domain.Item{item}}); !errors.Is(err, domain.ErrConflict) {
-		t.Fatal("stale version accepted after publication", err)
+	// The earlier version stays acceptable after the new one takes effect:
+	// a subject accepts the text it was shown.
+	if _, err = service.Accept(t.Context(), domain.AcceptInput{Subject: uuid.NewString(), Items: []domain.Item{item}}); err != nil {
+		t.Fatal("earlier published version refused", err)
 	}
 }

@@ -18,6 +18,7 @@ import (
 type Cases interface {
 	Pending(ctx context.Context, subject, audience, lang string) ([]domain.View, error)
 	Accept(ctx context.Context, in domain.AcceptInput) ([]domain.Record, error)
+	Check(ctx context.Context, audience string, items []domain.Item) (domain.CheckResult, error)
 	Withdraw(ctx context.Context, in domain.WithdrawInput) (domain.Record, error)
 	GetDocument(ctx context.Context, slug string, version int64, lang string) (domain.View, error)
 	ListDocuments(ctx context.Context, audience, lang string) ([]domain.View, error)
@@ -48,6 +49,13 @@ type (
 		Lang    string `json:"lang,omitempty"`
 	}
 )
+
+// CheckInput is the choice a flow is about to submit: the items it would
+// accept for an audience.
+type CheckInput struct {
+	Audience string        `json:"audience" schemapb:"description=all or registration"`
+	Items    []domain.Item `json:"items"`
+}
 
 // ListInput selects current documents by audience.
 type ListInput struct {
@@ -84,6 +92,10 @@ func New(parent deps.Scope, cases Cases) *Activities {
 	activity.Handle(a, "Accept", a.Accept,
 		activity.StartToClose(timeout), activity.Describe("appends idempotent legal acceptance evidence"),
 	)
+	activity.Handle(a, "Check", a.Check,
+		activity.StartToClose(timeout),
+		activity.Describe("reports whether items cover every required current document of an audience; writes nothing"),
+	)
 	activity.Handle(a, "Withdraw", a.Withdraw,
 		activity.StartToClose(timeout), activity.Describe("appends withdrawal of an optional consent"),
 	)
@@ -115,6 +127,13 @@ func (a *Activities) Accept(ctx context.Context, in domain.AcceptInput) (Records
 	out, err := a.cases.Accept(ctx, in)
 
 	return RecordsOutput{Records: out}, classify(err)
+}
+
+// Check is legal.Check.
+func (a *Activities) Check(ctx context.Context, in CheckInput) (domain.CheckResult, error) {
+	out, err := a.cases.Check(ctx, in.Audience, in.Items)
+
+	return out, classify(err)
 }
 
 // Withdraw is legal.Withdraw.

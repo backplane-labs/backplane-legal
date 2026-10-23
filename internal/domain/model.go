@@ -57,6 +57,16 @@ type AcceptInput struct {
 	Items   []Item            `json:"items"`
 	Context map[string]string `json:"context"`
 }
+
+// CheckResult is legal.Check's answer: OK when nothing is missing or
+// rejected.
+type CheckResult struct {
+	OK bool `json:"ok"`
+	// Missing are the required documents (current version) no item covers.
+	Missing []View `json:"missing"`
+	// Rejected are items naming no published, effective text.
+	Rejected []Item `json:"rejected"`
+}
 type WithdrawInput struct {
 	Subject  string            `json:"subject"`
 	Document string            `json:"document"`

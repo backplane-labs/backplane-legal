@@ -1,33 +1,45 @@
-# Reference snippets, not an installation-ready binding bundle.
-# Publish each hook separately through Wiring after reviewing README.md.
+# Registration that requires the installation's legal documents.
 #
-# BeforeRegistration runs when Kratos initializes the flow. It does not carry
-# submitted acceptance choices or a persisted identity. There is no legal
-# validation-only activity; do not replace this fail-closed example with Accept.
-# This example denies EVERY registration. Leave it commented unless that is
-# the installation's intended policy.
+# Put this file in BACKPLANE_WIRING_DIR (with backplane-kratos and legal
+# registered). The registration form sends the subject's choices as
+# transient_payload.legal_acceptances: [{document, version, lang}] — the
+# versions legal.ListDocuments / legal.Pending (audience registration) or the
+# public API showed.
 #
-# hook: kratos.BeforeRegistration
-# steps: {}
-# result:
-#   deny:
-#     messages:
-#       - text: "'Registration is disabled until legal acceptance validation is configured.'"
+# kratos.AfterRegistration runs before Kratos stores the identity and Kratos
+# waits for its answer:
+#   1. legal.Check: do the choices cover every required current document?
+#      It writes nothing.
+#   2. legal.Accept, only when they do: the evidence, with the identity's id
+#      (already final) as the subject.
+#   3. Otherwise the flow is denied with a message on the form.
+# A registration without the evidence cannot happen: if legal is down the
+# hook fails and Kratos stops the flow. The converse can: when Kratos fails
+# to store the identity after the hook (an address already taken), the
+# journal keeps an acceptance of an id that never became an identity —
+# truthful, and harmless.
 #
-# AfterRegistration receives an identity id before Kratos stores the identity.
-# The caller must supply transient_payload.legal_acceptances as a list of
-# {document: string, version: integer, lang: string}. This binding only records
-# the supplied items; it DOES NOT check coverage of all required documents.
-# A failed later registration can leave evidence for an identity never stored.
-# Do not enable this snippet as proof of completed registration or full consent.
-#
-# hook: kratos.AfterRegistration
-# steps:
-#   accepted:
-#     activity: legal.Accept
-#     input:
-#       subject: req.identity.id
-#       items: req.transient_payload.legal_acceptances
-#       context:
-#         channel: "'registration'"
-# result: {}
+# Keep kratos.AfterRegistration out of backplane-kratos's fail_open setting:
+# failing open would let a registration through without the evidence.
+bindings:
+  - hook: kratos.AfterRegistration
+    steps:
+      checked:
+        activity: legal.Check
+        input:
+          audience: "'registration'"
+          items: "has(req.transient_payload) && has(req.transient_payload.legal_acceptances) ? req.transient_payload.legal_acceptances : []"
+      accepted:
+        activity: legal.Accept
+        when: checked.ok
+        input:
+          subject: req.identity.id
+          items: req.transient_payload.legal_acceptances
+          context:
+            channel: "'registration'"
+            flow_id: req.flow_id
+            method: req.method
+            user_agent: "has(req.request_headers) && 'User-Agent' in req.request_headers ? req.request_headers['User-Agent'] : ''"
+            ip: "has(req.request_headers) && 'X-Forwarded-For' in req.request_headers ? req.request_headers['X-Forwarded-For'] : ''"
+    result:
+      deny: "checked.ok ? dyn(null) : dyn({'messages': [{'id': 4000901, 'text': 'Accept the required documents to register.'}]})"

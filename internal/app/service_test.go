@@ -187,8 +187,11 @@ func TestAcceptanceAndPending(t *testing.T) {
 		t.Fatal(pending, err)
 	}
 
-	if _, err = service.Accept(ctx, input); !errors.Is(err, domain.ErrConflict) {
-		t.Fatal("stale acceptance", err)
+	// The earlier version stays acceptable: the subject accepted what it
+	// was shown; Pending still asks for the current one.
+	again, err := service.Accept(ctx, input)
+	if err != nil || again[0].ID != first[0].ID {
+		t.Fatal("earlier published version", again, err)
 	}
 
 	if _, err = service.Withdraw(ctx, domain.WithdrawInput{Subject: "person", Document: "privacy"}); !errors.Is(err, domain.ErrConflict) {
@@ -413,5 +416,65 @@ func TestDraftNumberAllocation(t *testing.T) {
 	saved, err := service.SaveDraft(t.Context(), draft)
 	if err != nil || saved.Number != draft.Number || saved.Texts[0].Body != "edited draft" {
 		t.Fatal(saved, err)
+	}
+}
+
+// Check covers required current documents only, rejects texts that are not
+// published and in effect, and writes nothing; Accept refuses a version not
+// in effect yet.
+func TestCheckAndEffectiveVersions(t *testing.T) {
+	t.Parallel()
+	service, repo, published := fixture(t, true)
+	ctx := t.Context()
+
+	if err := service.CreateDocument(ctx, domain.Document{Slug: "marketing", Audience: domain.AudienceRegistration}); err != nil {
+		t.Fatal(err)
+	}
+
+	optional, err := service.SaveDraft(ctx, domain.Version{Document: "marketing", EffectiveAt: time.Now().Add(-time.Hour), Texts: []domain.Text{{Lang: "en", Title: "Marketing", Body: "Optional"}}})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if _, err = service.Publish(ctx, optional.Document, optional.Number); err != nil {
+		t.Fatal(err)
+	}
+
+	empty, err := service.Check(ctx, domain.AudienceRegistration, nil)
+	if err != nil || empty.OK || len(empty.Missing) != 1 || empty.Missing[0].Slug != "privacy" {
+		t.Fatal("required document missing", empty, err)
+	}
+
+	ok, err := service.Check(ctx, domain.AudienceRegistration, []domain.Item{{Document: "privacy", Version: published.Number, Lang: "en"}})
+	if err != nil || !ok.OK {
+		t.Fatal("required document covered", ok, err)
+	}
+
+	bad, err := service.Check(ctx, domain.AudienceRegistration, []domain.Item{
+		{Document: "privacy", Version: published.Number, Lang: "en"}, {Document: "privacy", Version: 99, Lang: "en"},
+	})
+	if err != nil || bad.OK || len(bad.Rejected) != 1 {
+		t.Fatal("unknown version rejected", bad, err)
+	}
+
+	if records, _ := repo.Records(ctx, domain.Filter{}); len(records) != 0 {
+		t.Fatal("check wrote evidence", records)
+	}
+
+	future := published
+	future.Number, future.Status, future.EffectiveAt = 0, domain.Draft, time.Now().Add(time.Hour)
+
+	future, err = service.SaveDraft(ctx, future)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if _, err = service.Publish(ctx, future.Document, future.Number); err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = service.Accept(ctx, domain.AcceptInput{Subject: "p", Items: []domain.Item{{Document: "privacy", Version: future.Number, Lang: "en"}}})
+	if !errors.Is(err, domain.ErrConflict) {
+		t.Fatal("version not in effect", err)
 	}
 }

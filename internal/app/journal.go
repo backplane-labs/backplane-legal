@@ -2,8 +2,10 @@ package app
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"maps"
+	"slices"
 	"strings"
 	"time"
 
@@ -47,13 +49,24 @@ func (s Service) acceptItem(ctx context.Context, input domain.AcceptInput, item 
 		return domain.Record{}, wrap(err)
 	}
 
-	view, err := s.GetDocument(ctx, item.Document, 0, item.Lang)
+	// Any published version already in effect: the subject accepted the
+	// text it was shown, even if a newer version took effect since (Pending
+	// asks for that one next). A draft or a version not yet in effect is not.
+	view, err := s.GetDocument(ctx, item.Document, item.Version, item.Lang)
+	if errors.Is(err, domain.ErrNotFound) {
+		if _, docErr := s.repo.Document(ctx, item.Document); docErr != nil {
+			return domain.Record{}, wrap(docErr)
+		}
+
+		return domain.Record{}, fmt.Errorf("%w: version not published or not in effect", domain.ErrConflict)
+	}
+
 	if err != nil {
 		return domain.Record{}, wrap(err)
 	}
 
 	if view.Version != item.Version || !strings.EqualFold(view.Text.Lang, item.Lang) {
-		return domain.Record{}, fmt.Errorf("%w: version not current or language unavailable", domain.ErrConflict)
+		return domain.Record{}, fmt.Errorf("%w: language unavailable", domain.ErrConflict)
 	}
 
 	records, err := s.repo.Records(ctx, domain.Filter{
@@ -147,4 +160,66 @@ func (s Service) appendRecord(ctx context.Context, record domain.Record, event s
 	}
 
 	return record, nil
+}
+
+// Check reports whether items cover every required document of audience
+// (registration includes the installation-wide ones) by its current
+// version in an available language, without writing anything: what a
+// registration flow checks before it lets the identity be created. Items
+// that name no published, effective text are rejected.
+func (s Service) Check(ctx context.Context, audience string, items []domain.Item) (domain.CheckResult, error) {
+	result := domain.CheckResult{Missing: []domain.View{}, Rejected: []domain.Item{}}
+
+	for _, item := range items {
+		if item.Version < 1 || !domain.ValidLanguage(item.Lang) {
+			result.Rejected = append(result.Rejected, item)
+
+			continue
+		}
+
+		view, err := s.GetDocument(ctx, item.Document, item.Version, item.Lang)
+
+		switch {
+		case errors.Is(err, domain.ErrNotFound), errors.Is(err, domain.ErrInvalid):
+			result.Rejected = append(result.Rejected, item)
+		case err != nil:
+			return domain.CheckResult{}, wrap(err)
+		case !strings.EqualFold(view.Text.Lang, item.Lang):
+			result.Rejected = append(result.Rejected, item)
+		}
+	}
+
+	if audience == domain.AudienceRegistration {
+		audience = ""
+	}
+
+	views, err := s.ListDocuments(ctx, audience, "")
+	if err != nil {
+		return domain.CheckResult{}, wrap(err)
+	}
+
+	for i := range views {
+		if !views[i].Required {
+			continue
+		}
+
+		if !covers(items, result.Rejected, &views[i]) {
+			result.Missing = append(result.Missing, views[i])
+		}
+	}
+
+	result.OK = len(result.Missing) == 0 && len(result.Rejected) == 0
+
+	return result, nil
+}
+
+// covers reports whether an accepted item names view's current version.
+func covers(items, rejected []domain.Item, view *domain.View) bool {
+	for _, item := range items {
+		if item.Document == view.Slug && item.Version == view.Version && !slices.Contains(rejected, item) {
+			return true
+		}
+	}
+
+	return false
 }
