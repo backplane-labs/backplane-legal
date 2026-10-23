@@ -1,0 +1,7 @@
+{
+  "service": "legal",
+  "nav": [
+    { "path": "", "labelKey": "legal" },
+    { "path": "journal", "labelKey": "journal" }
+  ]
+}
