@@ -1,0 +1,7 @@
+# Development only: PostgreSQL belongs to this repository's Compose project.
+postgres:
+  dsn: postgres://legal:legal@localhost:5457/legal?sslmode=disable
+http:
+  listen: ':8085'
+  frame_ancestors: ['*']
+default_lang: en

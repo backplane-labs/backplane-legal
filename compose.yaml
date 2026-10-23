@@ -1,0 +1,3 @@
+name: backplane-legal
+include:
+  - deployments/compose.yaml

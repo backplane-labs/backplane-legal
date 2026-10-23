@@ -1,0 +1,21 @@
+name: backplane-legal
+
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: legal
+      POSTGRES_PASSWORD: legal
+      POSTGRES_DB: legal
+    ports:
+      - "127.0.0.1:5457:5432"
+    volumes:
+      - legal-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U legal -d legal"]
+      interval: 2s
+      timeout: 2s
+      retries: 15
+
+volumes:
+  legal-postgres:

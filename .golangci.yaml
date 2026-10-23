@@ -348,7 +348,7 @@ formatters:
     - goimports
   settings:
     gofumpt:
-      module-path: github.com/backplane-labs/backplane
+      module-path: github.com/backplane-labs/backplane-legal
     gci:
       sections:
         - standard

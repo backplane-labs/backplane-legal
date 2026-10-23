@@ -1,0 +1,33 @@
+# Reference snippets, not an installation-ready binding bundle.
+# Publish each hook separately through Wiring after reviewing README.md.
+#
+# BeforeRegistration runs when Kratos initializes the flow. It does not carry
+# submitted acceptance choices or a persisted identity. There is no legal
+# validation-only activity; do not replace this fail-closed example with Accept.
+# This example denies EVERY registration. Leave it commented unless that is
+# the installation's intended policy.
+#
+# hook: kratos.BeforeRegistration
+# steps: {}
+# result:
+#   deny:
+#     messages:
+#       - text: "'Registration is disabled until legal acceptance validation is configured.'"
+#
+# AfterRegistration receives an identity id before Kratos stores the identity.
+# The caller must supply transient_payload.legal_acceptances as a list of
+# {document: string, version: integer, lang: string}. This binding only records
+# the supplied items; it DOES NOT check coverage of all required documents.
+# A failed later registration can leave evidence for an identity never stored.
+# Do not enable this snippet as proof of completed registration or full consent.
+#
+# hook: kratos.AfterRegistration
+# steps:
+#   accepted:
+#     activity: legal.Accept
+#     input:
+#       subject: req.identity.id
+#       items: req.transient_payload.legal_acceptances
+#       context:
+#         channel: "'registration'"
+# result: {}

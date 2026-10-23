@@ -1,4 +1,4 @@
-# Proto lint/generate for smtp's internal console API. Run through `make gen`
+# Proto lint/generate for legal's internal console API and event payloads. Run through `make gen`
 # / `make lint-proto`: Go plugins are pinned in ./bin, the TypeScript ones
 # come from web/node_modules (make configure-web).
 lint:
