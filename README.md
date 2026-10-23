@@ -23,7 +23,7 @@ Inputs use JSON field names. `subject` is an opaque identifier chosen by the cal
 | `legal.Pending` | `{subject, audience?, lang?}`. Current documents the subject hasn't accepted, including selected text, policy, languages, change note and `previous_accepted`. Check at sign-in or another application boundary, not on every request. |
 | `legal.Accept` | `{subject, items: [{document, version, lang}], context?}`. Atomically accepts every supplied item; requires a published version already in effect (not necessarily the current one) and an available language. An already-accepted `(subject, document, version)` returns its existing record without appending or emitting another event. |
 | `legal.Check` | `{audience, items: [{document, version, lang}]}`. Writes nothing; returns `{ok, missing, rejected}`: the required current documents of the audience no item covers (registration includes the installation-wide ones) and the items naming no published, effective text. What a registration flow checks before the identity is created. |
-| `legal.Withdraw` | `{subject, document, context?}`. Appends a withdrawal for an optional consent; rejects required documents and a subject with no acceptance. Repeating a withdrawal returns the existing withdrawal. A later acceptance appends new evidence. |
+| `legal.Withdraw` | `{subject, document, context?}`. Appends a withdrawal for every version of an optional consent the subject still accepts (an older version accepted after a newer one included) and returns the newest; rejects required documents and a subject with no acceptance. Repeating a withdrawal returns the existing withdrawal. A later acceptance appends new evidence. |
 | `legal.GetDocument` | `{slug, version?, lang?}`. Selects a published, effective text; without a version, selects the current one. Historical effective publications remain readable. |
 | `legal.ListDocuments` | `{audience?, lang?}`. Current effective publications; documents without one don't appear. |
 | `legal.Acceptances` | `{subject}`. The subject's journal, including withdrawals. This isn't a filtered view of only active consent. |
@@ -39,7 +39,7 @@ Context holds caller-supplied string pairs such as `channel`, `ip`, `device` and
 | --- | --- |
 | `legal.Published` | `document`, `version`, RFC 3339 `effective_at`, `required`, `audience`. Emitted at publication, even if the effective time lies in the future; consumers must respect that time. |
 | `legal.Accepted` | `subject`, `document`, `version`, `lang`, `seq`. One newly appended acceptance. |
-| `legal.Withdrawn` | `subject`, `document`, `version`, `lang`, `seq`. One newly appended withdrawal. |
+| `legal.Withdrawn` | `subject`, `document`, `version`, `lang`, `seq`. One newly appended withdrawal; a withdrawal of several versions emits one per version. |
 
 Contracts live in `proto/legal/events/v1/events.proto`. The Go package is `github.com/backplane-labs/backplane-legal/proto/legal/events/v1`; protobuf-es v2 consumers install `@backplane-labs/legal-events` from GitHub Packages and import schemas from:
 

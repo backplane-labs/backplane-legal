@@ -394,6 +394,42 @@ func TestWithdrawalDoesNotResurrectEarlierAcceptance(t *testing.T) {
 	}
 }
 
+// An older version accepted after a newer one is withdrawn with it.
+func TestWithdrawCoversEveryVersion(t *testing.T) {
+	t.Parallel()
+	service, repo, published := fixture(t, false)
+	ctx := t.Context()
+
+	published.Status = domain.Draft
+	published.Number = 0
+
+	draft, err := service.SaveDraft(ctx, published)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if _, err = service.Publish(ctx, draft.Document, draft.Number); err != nil {
+		t.Fatal(err)
+	}
+
+	for _, version := range []int64{draft.Number, 1} {
+		input := domain.AcceptInput{Subject: "person", Items: []domain.Item{{Document: draft.Document, Version: version, Lang: "en"}}}
+		if _, err = service.Accept(ctx, input); err != nil {
+			t.Fatal(version, err)
+		}
+	}
+
+	if _, err = service.Withdraw(ctx, domain.WithdrawInput{Subject: "person", Document: draft.Document}); err != nil {
+		t.Fatal(err)
+	}
+
+	for _, version := range []int64{1, draft.Number} {
+		if state, _ := domain.LatestState(repo.records, "person", draft.Document, version); state.Kind != domain.Withdrawn {
+			t.Errorf("version %d still %s", version, state.Kind)
+		}
+	}
+}
+
 func TestDraftNumberAllocation(t *testing.T) {
 	t.Parallel()
 	service, _, published := fixture(t, false)

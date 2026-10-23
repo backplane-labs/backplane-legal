@@ -111,21 +111,44 @@ func (s Service) Withdraw(ctx context.Context, input domain.WithdrawInput) (doma
 			return wrap(err)
 		}
 
+		// Every version still accepted is withdrawn: Accept takes any version
+		// in effect, so an older acceptance may outlive a newer one.
+		versions := map[int64]bool{}
+		for i := range records {
+			versions[records[i].Version] = true
+		}
+
+		withdrawn := false
+
+		for _, version := range slices.Sorted(maps.Keys(versions)) {
+			latest, _ := domain.LatestState(records, input.Subject, input.Document, version)
+			if latest.Kind != domain.Accepted {
+				continue
+			}
+
+			latest.Kind = domain.Withdrawn
+			latest.Context = input.Context
+
+			result, err = s.appendRecord(ctx, latest, "legal.Withdrawn")
+			if err != nil {
+				return wrap(err)
+			}
+
+			withdrawn = true
+		}
+
+		if withdrawn {
+			return nil
+		}
+
 		latest, exists := domain.LatestState(records, input.Subject, input.Document, 0)
 		if !exists {
 			return domain.ErrNotFound
 		}
 
-		if latest.Kind == domain.Withdrawn {
-			result = latest
-			return nil
-		}
+		result = latest
 
-		latest.Kind = domain.Withdrawn
-		latest.Context = input.Context
-		result, err = s.appendRecord(ctx, latest, "legal.Withdrawn")
-
-		return wrap(err)
+		return nil
 	})
 
 	return result, wrap(err)
