@@ -6,21 +6,22 @@
 # versions legal.ListDocuments / legal.Pending (audience registration) or the
 # public API showed.
 #
-# kratos.AfterRegistration runs before Kratos stores the identity and Kratos
-# waits for its answer:
-#   1. legal.Check: do the choices cover every required current document?
-#      It writes nothing.
-#   2. legal.Accept, only when they do: the evidence, with the identity's id
-#      (already final) as the subject.
-#   3. Otherwise the flow is denied with a message on the form.
-# A registration without the evidence cannot happen: if legal is down the
-# hook fails and Kratos stops the flow. The converse can: when Kratos fails
-# to store the identity after the hook (an address already taken), the
-# journal keeps an acceptance of an id that never became an identity —
-# truthful, and harmless.
+# Two points of the flow, because the identity has no id until Kratos
+# stores it:
+#   1. kratos.AfterRegistration, before the store, Kratos waits:
+#      legal.Check — do the choices cover every required current document?
+#      It writes nothing; when they do not, the flow is denied with a
+#      message on the form and no identity is created.
+#   2. kratos.AfterRegistrationStored, after the store, Kratos waits:
+#      legal.Accept records the evidence with the identity's final id as
+#      the subject.
+# If legal fails at 1, the registration stops. If it fails at 2, the flow
+# fails but the identity stays stored without the evidence; legal.Pending
+# at sign-in then shows it the required documents again (channel
+# reaccept), so no session goes on without them.
 #
-# Keep kratos.AfterRegistration out of backplane-kratos's fail_open setting:
-# failing open would let a registration through without the evidence.
+# Keep both hooks out of backplane-kratos's fail_open setting: failing
+# open at 1 would let a registration through without the check.
 bindings:
   - hook: kratos.AfterRegistration
     steps:
@@ -29,9 +30,13 @@ bindings:
         input:
           audience: "'registration'"
           items: "has(req.transient_payload) && has(req.transient_payload.legal_acceptances) ? req.transient_payload.legal_acceptances : []"
+    result:
+      deny: "checked.ok ? dyn(null) : dyn({'messages': [{'id': 4000901, 'text': 'Accept the required documents to register.'}]})"
+  - hook: kratos.AfterRegistrationStored
+    steps:
       accepted:
         activity: legal.Accept
-        when: checked.ok
+        when: "has(req.transient_payload) && has(req.transient_payload.legal_acceptances) && size(req.transient_payload.legal_acceptances) > 0"
         input:
           subject: req.identity.id
           items: req.transient_payload.legal_acceptances
@@ -44,5 +49,3 @@ bindings:
             # appended. The hops left of it are the client's to write.
             # Behind more proxies of your own, count that many from the right.
             ip: "has(req.request_headers) && 'X-Forwarded-For' in req.request_headers ? req.request_headers['X-Forwarded-For'].split(',')[size(req.request_headers['X-Forwarded-For'].split(',')) - 1].trim() : ''"
-    result:
-      deny: "checked.ok ? dyn(null) : dyn({'messages': [{'id': 4000901, 'text': 'Accept the required documents to register.'}]})"

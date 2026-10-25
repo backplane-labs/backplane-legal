@@ -118,22 +118,25 @@ The registration form shows the documents of audience `registration`
 subject's choices as `transient_payload.legal_acceptances: [{document,
 version, lang}]` — with every method, password and OIDC alike.
 
-`kratos.AfterRegistration` runs before Kratos stores the identity, and Kratos
-waits for its answer:
+The identity has no id until Kratos stores it, so the flow uses two points.
+Kratos waits for the answer at both:
 
-1. `legal.Check{audience: registration, items}` reports whether the choices
-   cover every required current document; it writes nothing.
-2. Only when they do, `legal.Accept` records them with the identity's id —
-   already final — as the subject, and the channel, flow, method, client IP
-   and user agent as context.
-3. Otherwise the flow is denied with a message on the form.
+1. `kratos.AfterRegistration` runs before the store. `legal.Check{audience:
+   registration, items}` reports whether the choices cover every required
+   current document and writes nothing. If they don't, the flow is denied
+   with a message on the form and no identity is created.
+2. `kratos.AfterRegistrationStored` runs after the store. `legal.Accept`
+   records the choices with the identity's final id as the subject, and the
+   channel, flow, method, client IP and user agent as context.
 
-So no identity is created without its evidence: if legal is unreachable the
-hook fails and Kratos stops the flow. Keep `kratos.AfterRegistration` out of
-backplane-kratos's `fail_open`. The converse is possible and harmless: when
-Kratos fails to store the identity after the hook (an address already
-taken), the journal keeps a truthful acceptance by an id that never became an
-identity.
+If legal is unreachable at 1, the registration stops. If it fails at 2, the
+flow fails but the identity stays stored without the evidence. `legal.Pending`
+at sign-in then presents the required documents again (`channel: reaccept`),
+so no session continues without them. Keep `kratos.AfterRegistration` out of
+backplane-kratos's `fail_open`.
+
+`legal.Accept`, `legal.Withdraw` and `legal.Pending` refuse an empty subject
+and the nil UUID `00000000-0000-0000-0000-000000000000`, which names no one.
 
 `legal.Accept` takes any published version already in effect, not only the
 current one: a subject accepts the text it was shown even if a newer version

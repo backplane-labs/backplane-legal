@@ -55,7 +55,7 @@ type Item struct {
 type AcceptInput struct {
 	Subject string            `json:"subject"`
 	Items   []Item            `json:"items"`
-	Context map[string]string `json:"context"`
+	Context map[string]string `json:"context,omitempty"`
 }
 
 // CheckResult is legal.Check's answer: OK when nothing is missing or
@@ -70,7 +70,7 @@ type CheckResult struct {
 type WithdrawInput struct {
 	Subject  string            `json:"subject"`
 	Document string            `json:"document"`
-	Context  map[string]string `json:"context"`
+	Context  map[string]string `json:"context,omitempty"`
 }
 type Filter struct {
 	Subject  string    `json:"subject"`

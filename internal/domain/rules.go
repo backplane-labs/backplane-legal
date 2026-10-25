@@ -38,6 +38,18 @@ type Event struct {
 	Payload json.RawMessage `json:"payload"`
 }
 
+// nilUUID is the id of an identity not stored yet (Kratos before it
+// stores a registration): never a subject.
+const nilUUID = "00000000-0000-0000-0000-000000000000"
+
+// ValidSubject: a subject is opaque but present, and not the nil UUID,
+// which names no one.
+func ValidSubject(subject string) bool {
+	subject = strings.TrimSpace(subject)
+
+	return subject != "" && !strings.EqualFold(subject, nilUUID)
+}
+
 // ValidLanguage checks BCP 47 tags without restricting the service to known products.
 func ValidLanguage(lang string) bool {
 	if strings.TrimSpace(lang) == "" {

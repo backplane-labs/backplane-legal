@@ -15,7 +15,7 @@ import (
 )
 
 func (s Service) Accept(ctx context.Context, input domain.AcceptInput) ([]domain.Record, error) {
-	if strings.TrimSpace(input.Subject) == "" || len(input.Items) == 0 {
+	if !domain.ValidSubject(input.Subject) || len(input.Items) == 0 {
 		return nil, fmt.Errorf("%w: subject and items required", domain.ErrInvalid)
 	}
 
@@ -90,7 +90,7 @@ func (s Service) acceptItem(ctx context.Context, input domain.AcceptInput, item 
 }
 
 func (s Service) Withdraw(ctx context.Context, input domain.WithdrawInput) (domain.Record, error) {
-	if strings.TrimSpace(input.Subject) == "" || input.Document == "" {
+	if !domain.ValidSubject(input.Subject) || input.Document == "" {
 		return domain.Record{}, fmt.Errorf("%w: subject and document required", domain.ErrInvalid)
 	}
 

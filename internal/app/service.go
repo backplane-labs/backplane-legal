@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"slices"
-	"strings"
 	"time"
 
 	"github.com/backplane-labs/backplane-legal/internal/app/port"
@@ -233,7 +232,7 @@ func (s Service) ListDocuments(ctx context.Context, audience, lang string) ([]do
 }
 
 func (s Service) Pending(ctx context.Context, subject, audience, lang string) ([]domain.View, error) {
-	if strings.TrimSpace(subject) == "" {
+	if !domain.ValidSubject(subject) {
 		return nil, fmt.Errorf("%w: subject", domain.ErrInvalid)
 	}
 

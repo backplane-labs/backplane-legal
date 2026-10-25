@@ -199,6 +199,24 @@ func TestAcceptanceAndPending(t *testing.T) {
 	}
 }
 
+// The nil UUID names an identity not stored yet: no evidence of it.
+func TestNilSubjectRejected(t *testing.T) {
+	t.Parallel()
+	service, _, published := fixture(t, true)
+	ctx := t.Context()
+	items := []domain.Item{{Document: "privacy", Version: published.Number, Lang: "en"}}
+
+	for _, subject := range []string{"", " ", "00000000-0000-0000-0000-000000000000"} {
+		if _, err := service.Accept(ctx, domain.AcceptInput{Subject: subject, Items: items}); !errors.Is(err, domain.ErrInvalid) {
+			t.Fatalf("accept %q: %v", subject, err)
+		}
+
+		if _, err := service.Withdraw(ctx, domain.WithdrawInput{Subject: subject, Document: "privacy"}); !errors.Is(err, domain.ErrInvalid) {
+			t.Fatalf("withdraw %q: %v", subject, err)
+		}
+	}
+}
+
 func TestWithdrawAndReaccept(t *testing.T) {
 	t.Parallel()
 	service, repo, published := fixture(t, false)
