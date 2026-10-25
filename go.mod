@@ -3,7 +3,7 @@ module github.com/backplane-labs/backplane-legal
 go 1.26.0
 
 require (
-	github.com/backplane-labs/backplane v0.6.53
+	github.com/backplane-labs/backplane v0.6.54
 	github.com/google/uuid v1.6.0
 	github.com/gopherex/pgtx v1.1.2
 	github.com/gopherex/xlog v1.2.1
