@@ -3,7 +3,7 @@ module github.com/backplane-labs/backplane-legal
 go 1.26.0
 
 require (
-	github.com/backplane-labs/backplane v0.6.41
+	github.com/backplane-labs/backplane v0.6.52
 	github.com/google/uuid v1.6.0
 	github.com/gopherex/pgtx v1.1.2
 	github.com/gopherex/xlog v1.2.1
@@ -25,6 +25,7 @@ require (
 	github.com/cbroglie/mustache v1.4.0 // indirect
 	github.com/cenkalti/backoff/v5 v5.0.3 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
+	github.com/coder/websocket v1.8.14 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/ebitengine/purego v0.10.0 // indirect
 	github.com/exaring/otelpgx v0.12.0 // indirect
@@ -42,6 +43,7 @@ require (
 	github.com/google/cel-go v0.30.0 // indirect
 	github.com/gopherex/schemapb/go v1.9.9 // indirect
 	github.com/gopherex/sqld v1.1.3 // indirect
+	github.com/gopherex/ws-proto v1.8.1 // indirect
 	github.com/gopherex/xconf v1.4.0 // indirect
 	github.com/gopherex/xconf/contrib/decoders/json v1.4.0 // indirect
 	github.com/gopherex/xconf/contrib/decoders/yaml v1.4.0 // indirect
