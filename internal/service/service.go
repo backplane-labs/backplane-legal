@@ -103,7 +103,7 @@ func Declare(svc *backplane.Service[State]) {
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		httpapi.New(st.Legal, st.frames.Get()).ServeHTTP(w, r)
 	})
-	svc.HTTP("/legal/", handler, api.Listen(st.public))
+	svc.HTTP("/legal/", handler, api.Listen("public", st.public))
 	svc.Internal(func(reg grpc.ServiceRegistrar) { legalconsolev1.RegisterAdminServiceServer(reg, st.Admin) })
 
 	if bundle := ui.Bundle(); bundle != nil {
