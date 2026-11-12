@@ -72,6 +72,7 @@ The console module lets operators create document policy, edit drafts by languag
 | `GetVersions`, `SaveDraft`, `Publish`, `Preview` | Draft lifecycle, publication history and sanitized preview. |
 | `Journal`, `Export` | Filter by subject, document, version and inclusive server-time bounds `from`/`to` in RFC 3339. Export returns bytes, content type and filename through the authenticated console relay. |
 | `Verify` | `{from?, to?}` sequence bounds; returns `{ok, broken_seq, checked}`. Zero bounds select the beginning/end. |
+| `GetSettings` | The installation's document policy: `{required_only}` (see `documents.required_only`). |
 
 Operator changes produce application audit records: `legal.document.created`, `legal.draft.saved`, `legal.version.published`. Acceptance evidence stays in the separate append-only journal.
 
@@ -164,6 +165,7 @@ default_lang: en
 | `postgres.dsn` | `LEGAL_POSTGRES_DSN` | PostgreSQL DSN. Use a dedicated database; startup applies migrations in the `legal` schema. The section uses the SDK's `postgres.Config`, including `query_log` and `pool` settings. |
 | `http.listen` | `LEGAL_HTTP_LISTEN` | Listen address for read-only document JSON and HTML; default `:8085`. Keep the authenticated internal API on its separate listener. |
 | `http.frame_ancestors` | `LEGAL_HTTP_FRAME_ANCESTORS` | Live allowed embedding origins; default `["*"]`. Restrict this for deployments that shouldn't allow arbitrary framing. |
+| `documents.required_only` | `LEGAL_DOCUMENTS_REQUIRED_ONLY` | Live; default `false`. When on, the installation uses only required documents: `CreateDocument` and `Publish` refuse an optional one with `FAILED_PRECONDITION` and `ErrorInfo` reason `REQUIRED_ONLY` (domain `legal.backplane-labs`), and the console hides the policy toggle and disables publishing an optional document. Optional documents already published stay current and keep their evidence; `Pending`, `Check`, `Accept` and `Withdraw` are unchanged. |
 | `default_lang` | `LEGAL_DEFAULT_LANG` | Default BCP 47 language for newly created documents that omit their own language; default `en`. Existing documents keep their stored default. |
 
 Set `BACKPLANE_CONFIG_FILE` to load a YAML file. Backplane's own settings use `BACKPLANE_*`, including `BACKPLANE_INTERNAL_SECRET`, discovery and event transport addresses; supply those for the target installation. Don't expose the development database password or internal secret on an untrusted network.

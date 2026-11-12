@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 import { WsTransport } from "@gopherex/ws-proto-transport";
-import type { CreateDocumentRequest, CreateDocumentResponse, ExportRequest, ExportResponse, GetVersionsRequest, GetVersionsResponse, JournalRequest, JournalResponse, ListDocumentsRequest, ListDocumentsResponse, PreviewRequest, PreviewResponse, PublishRequest, PublishResponse, SaveDraftRequest, SaveDraftResponse, VerifyRequest, VerifyResponse } from "./admin_pb";
+import type { CreateDocumentRequest, CreateDocumentResponse, ExportRequest, ExportResponse, GetSettingsRequest, GetSettingsResponse, GetVersionsRequest, GetVersionsResponse, JournalRequest, JournalResponse, ListDocumentsRequest, ListDocumentsResponse, PreviewRequest, PreviewResponse, PublishRequest, PublishResponse, SaveDraftRequest, SaveDraftResponse, VerifyRequest, VerifyResponse } from "./admin_pb";
 export interface CallOptions {
     /** Request metadata sent as headers on the opening frame. */
     headers?: Record<string, string>;
@@ -60,4 +60,10 @@ export declare class AdminServiceClient {
      * @generated from rpc legal.console.v1.AdminService.Preview
      */
     preview(req: PreviewRequest, options?: CallOptions): Promise<PreviewResponse>;
+    /**
+     * The installation's document policy, as the console needs it.
+     *
+     * @generated from rpc legal.console.v1.AdminService.GetSettings
+     */
+    getSettings(req: GetSettingsRequest, options?: CallOptions): Promise<GetSettingsResponse>;
 }

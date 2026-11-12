@@ -46,7 +46,7 @@ func testPublicationLock(t *testing.T, service *app.Service, repo *store.Store, 
 
 	reached := make(chan struct{})
 	release := make(chan struct{})
-	accepting := app.New(&pausedAcceptance{Store: repo, reached: reached, release: release}, "en")
+	accepting := app.New(&pausedAcceptance{Store: repo, reached: reached, release: release}, "en", app.AnyDocuments)
 	accepted := make(chan error, 1)
 
 	go func() {

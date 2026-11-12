@@ -64,6 +64,11 @@ func TestActivityPayloadsAndMetadata(t *testing.T) {
 	names := map[string]bool{}
 	for _, entry := range manifest.GetActivities() {
 		names[entry.GetName()] = true
+
+		// A payload whose tags do not reflect reaches the console as plain JSON.
+		if entry.GetInput() == nil || entry.GetOutput() == nil {
+			t.Errorf("%s: input or output schema not reflected", entry.GetName())
+		}
 	}
 
 	for _, name := range []string{"Pending", "Accept", "Check", "Withdraw", "GetDocument", "ListDocuments", "Acceptances", "Verify"} {

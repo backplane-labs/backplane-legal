@@ -13,6 +13,14 @@ service AdminService {
   rpc Verify(VerifyRequest) returns (VerifyResponse);
   rpc Export(ExportRequest) returns (ExportResponse);
   rpc Preview(PreviewRequest) returns (PreviewResponse);
+  // The installation's document policy, as the console needs it.
+  rpc GetSettings(GetSettingsRequest) returns (GetSettingsResponse);
+}
+message GetSettingsRequest {}
+message GetSettingsResponse {
+  // Only required documents: CreateDocument and Publish refuse an optional
+  // one with FAILED_PRECONDITION and ErrorInfo reason REQUIRED_ONLY.
+  bool required_only = 1;
 }
 // Document holds stable document policy.
 message Document {

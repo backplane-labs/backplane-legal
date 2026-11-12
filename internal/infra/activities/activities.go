@@ -29,7 +29,7 @@ type Cases interface {
 // PendingInput selects a subject's current required and optional choices.
 type PendingInput struct {
 	Subject  string `json:"subject"            schemapb:"description=Opaque product subject"`
-	Audience string `json:"audience,omitempty" schemapb:"description=all or registration; every document when empty"`
+	Audience string `json:"audience,omitempty" schemapb:"description=all or registration, else every document"`
 	// The document's default language when empty.
 	Lang string `json:"lang,omitempty" schemapb:"description=Requested BCP 47 language"`
 }

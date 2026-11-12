@@ -9,6 +9,7 @@ import (
 	"github.com/backplane-labs/backplane/pkg/backplane"
 	"github.com/backplane-labs/backplane/pkg/backplane/deps"
 	"github.com/google/uuid"
+	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -28,7 +29,15 @@ type Cases interface {
 	Publish(ctx context.Context, slug string, number int64) (domain.Version, error)
 	Acceptances(ctx context.Context, filter domain.Filter) ([]domain.Record, error)
 	Verify(ctx context.Context, from, to int64) (domain.Verification, error)
+	RequiredOnly() bool
 }
+
+// ErrorDomain and ReasonRequiredOnly name the refusal of an optional
+// document in the gRPC ErrorInfo.
+const (
+	ErrorDomain        = "legal.backplane-labs"
+	ReasonRequiredOnly = "REQUIRED_ONLY"
+)
 
 // Admin is the operator-facing SDK component.
 type Admin struct {
@@ -40,6 +49,13 @@ type Admin struct {
 // New creates the internal console adapter.
 func New(parent deps.Scope, cases Cases) *Admin {
 	return &Admin{Component: deps.NewComponent(parent, "admin"), cases: cases}
+}
+
+// GetSettings is the installation's document policy.
+func (a *Admin) GetSettings(
+	context.Context, *legalconsolev1.GetSettingsRequest,
+) (*legalconsolev1.GetSettingsResponse, error) {
+	return &legalconsolev1.GetSettingsResponse{RequiredOnly: a.cases.RequiredOnly()}, nil
 }
 
 // ListDocuments includes documents that have no published version yet.
@@ -222,6 +238,8 @@ func (a *Admin) Preview(
 
 func (a *Admin) failure(err error) error {
 	switch {
+	case errors.Is(err, domain.ErrRequiredOnly):
+		return requiredOnly(err)
 	case errors.Is(err, domain.ErrInvalid):
 		return status.Error(codes.InvalidArgument, err.Error()) //nolint:wrapcheck // Return gRPC status.
 	case errors.Is(err, domain.ErrNotFound):
@@ -234,6 +252,32 @@ func (a *Admin) failure(err error) error {
 		return status.Error(codes.Unavailable, "legal store unavailable; see service log")
 	}
 }
+
+// requiredOnly is the refusal of an optional document: FAILED_PRECONDITION
+// with a stable reason a client branches on.
+func requiredOnly(err error) error {
+	st := status.New(codes.FailedPrecondition, err.Error())
+	info := &errdetails.ErrorInfo{Reason: ReasonRequiredOnly, Domain: ErrorDomain}
+
+	if detailed, derr := st.WithDetails(info); derr == nil {
+		st = detailed
+	}
+
+	return refusal{st: st, cause: err}
+}
+
+// refusal is a gRPC status keeping its domain cause.
+type refusal struct {
+	st    *status.Status
+	cause error
+}
+
+func (r refusal) Error() string { return r.st.Message() }
+
+func (r refusal) Unwrap() error { return r.cause }
+
+// GRPCStatus is what gRPC sends.
+func (r refusal) GRPCStatus() *status.Status { return r.st }
 
 func (a *Admin) audit(ctx context.Context, name, document string) {
 	actor := "internal"

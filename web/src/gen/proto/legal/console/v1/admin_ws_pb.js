@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 import { applyUnaryCallbacks } from "@gopherex/ws-proto-transport";
-import { CreateDocumentRequestSchema, CreateDocumentResponseSchema, ExportRequestSchema, ExportResponseSchema, GetVersionsRequestSchema, GetVersionsResponseSchema, JournalRequestSchema, JournalResponseSchema, ListDocumentsRequestSchema, ListDocumentsResponseSchema, PreviewRequestSchema, PreviewResponseSchema, PublishRequestSchema, PublishResponseSchema, SaveDraftRequestSchema, SaveDraftResponseSchema, VerifyRequestSchema, VerifyResponseSchema } from "./admin_pb";
+import { CreateDocumentRequestSchema, CreateDocumentResponseSchema, ExportRequestSchema, ExportResponseSchema, GetSettingsRequestSchema, GetSettingsResponseSchema, GetVersionsRequestSchema, GetVersionsResponseSchema, JournalRequestSchema, JournalResponseSchema, ListDocumentsRequestSchema, ListDocumentsResponseSchema, PreviewRequestSchema, PreviewResponseSchema, PublishRequestSchema, PublishResponseSchema, SaveDraftRequestSchema, SaveDraftResponseSchema, VerifyRequestSchema, VerifyResponseSchema } from "./admin_pb";
 const AdminService_ListDocuments = {
     typeName: "legal.console.v1.AdminService",
     name: "ListDocuments",
@@ -66,6 +66,13 @@ const AdminService_Preview = {
     kind: "unary",
     input: PreviewRequestSchema,
     output: PreviewResponseSchema,
+};
+const AdminService_GetSettings = {
+    typeName: "legal.console.v1.AdminService",
+    name: "GetSettings",
+    kind: "unary",
+    input: GetSettingsRequestSchema,
+    output: GetSettingsResponseSchema,
 };
 /**
  * AdminService is the internal, operator-authenticated legal console API.
@@ -137,6 +144,15 @@ export class AdminServiceClient {
      */
     async preview(req, options) {
         const res = await this.transport.unary(AdminService_Preview, req, { headers: options === null || options === void 0 ? void 0 : options.headers, signal: options === null || options === void 0 ? void 0 : options.signal, timeoutMs: options === null || options === void 0 ? void 0 : options.timeoutMs });
+        return applyUnaryCallbacks(res, options);
+    }
+    /**
+     * The installation's document policy, as the console needs it.
+     *
+     * @generated from rpc legal.console.v1.AdminService.GetSettings
+     */
+    async getSettings(req, options) {
+        const res = await this.transport.unary(AdminService_GetSettings, req, { headers: options === null || options === void 0 ? void 0 : options.headers, signal: options === null || options === void 0 ? void 0 : options.signal, timeoutMs: options === null || options === void 0 ? void 0 : options.timeoutMs });
         return applyUnaryCallbacks(res, options);
     }
 }

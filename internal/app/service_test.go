@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"slices"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -130,7 +131,7 @@ func fixture(t *testing.T, required bool) (*app.Service, *memory, domain.Version
 
 	repo := newMemory()
 
-	service := app.New(repo, "en")
+	service := app.New(repo, "en", app.AnyDocuments)
 	if err := service.CreateDocument(t.Context(), domain.Document{Slug: "privacy", Audience: domain.AudienceAll, Required: required}); err != nil {
 		t.Fatal(err)
 	}
@@ -146,6 +147,60 @@ func fixture(t *testing.T, required bool) (*app.Service, *memory, domain.Version
 	}
 
 	return service, repo, published
+}
+
+// With required documents only, an optional document is neither created
+// nor published, and one already published stays with its evidence;
+// required documents are untouched. The policy is read at each call.
+func TestRequiredOnly(t *testing.T) {
+	t.Parallel()
+
+	var only atomic.Bool
+
+	repo := newMemory()
+	service := app.New(repo, "en", only.Load)
+	ctx := t.Context()
+	text := []domain.Text{{Lang: "en", Title: "News", Body: "text"}}
+
+	if err := service.CreateDocument(ctx, domain.Document{Slug: "news", Audience: domain.AudienceAll}); err != nil {
+		t.Fatal(err)
+	}
+
+	draft, err := service.SaveDraft(ctx, domain.Version{Document: "news", EffectiveAt: time.Now().Add(-time.Hour), Texts: text})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if _, err := service.Publish(ctx, draft.Document, draft.Number); err != nil {
+		t.Fatal(err)
+	}
+
+	only.Store(true)
+
+	if !service.RequiredOnly() {
+		t.Fatal("policy not read live")
+	}
+
+	if err := service.CreateDocument(ctx, domain.Document{Slug: "promo", Audience: domain.AudienceAll}); !errors.Is(err, domain.ErrRequiredOnly) {
+		t.Fatalf("create optional: %v", err)
+	}
+
+	next, err := service.SaveDraft(ctx, domain.Version{Document: "news", EffectiveAt: time.Now().Add(-time.Minute), Texts: text})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if _, err := service.Publish(ctx, next.Document, next.Number); !errors.Is(err, domain.ErrRequiredOnly) {
+		t.Fatalf("publish optional: %v", err)
+	}
+
+	if view, err := service.GetDocument(ctx, "news", 0, "en"); err != nil || view.Version != draft.Number {
+		t.Fatalf("the published optional document: %+v %v", view, err)
+	}
+
+	if err := service.CreateDocument(ctx, domain.Document{Slug: "terms", Audience: domain.AudienceAll, Required: true}); err != nil {
+		t.Fatalf("create required: %v", err)
+	}
 }
 
 func TestAcceptanceAndPending(t *testing.T) {

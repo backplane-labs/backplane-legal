@@ -21,6 +21,88 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type GetSettingsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetSettingsRequest) Reset() {
+	*x = GetSettingsRequest{}
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetSettingsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSettingsRequest) ProtoMessage() {}
+
+func (x *GetSettingsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSettingsRequest.ProtoReflect.Descriptor instead.
+func (*GetSettingsRequest) Descriptor() ([]byte, []int) {
+	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{0}
+}
+
+type GetSettingsResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Only required documents: CreateDocument and Publish refuse an optional
+	// one with FAILED_PRECONDITION and ErrorInfo reason REQUIRED_ONLY.
+	RequiredOnly  bool `protobuf:"varint,1,opt,name=required_only,json=requiredOnly,proto3" json:"required_only,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetSettingsResponse) Reset() {
+	*x = GetSettingsResponse{}
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetSettingsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSettingsResponse) ProtoMessage() {}
+
+func (x *GetSettingsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSettingsResponse.ProtoReflect.Descriptor instead.
+func (*GetSettingsResponse) Descriptor() ([]byte, []int) {
+	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *GetSettingsResponse) GetRequiredOnly() bool {
+	if x != nil {
+		return x.RequiredOnly
+	}
+	return false
+}
+
 // Document holds stable document policy.
 type Document struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -34,7 +116,7 @@ type Document struct {
 
 func (x *Document) Reset() {
 	*x = Document{}
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[0]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -46,7 +128,7 @@ func (x *Document) String() string {
 func (*Document) ProtoMessage() {}
 
 func (x *Document) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[0]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -59,7 +141,7 @@ func (x *Document) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Document.ProtoReflect.Descriptor instead.
 func (*Document) Descriptor() ([]byte, []int) {
-	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{0}
+	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *Document) GetSlug() string {
@@ -104,7 +186,7 @@ type Text struct {
 
 func (x *Text) Reset() {
 	*x = Text{}
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[1]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -116,7 +198,7 @@ func (x *Text) String() string {
 func (*Text) ProtoMessage() {}
 
 func (x *Text) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[1]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -129,7 +211,7 @@ func (x *Text) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Text.ProtoReflect.Descriptor instead.
 func (*Text) Descriptor() ([]byte, []int) {
-	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{1}
+	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *Text) GetLang() string {
@@ -183,7 +265,7 @@ type Version struct {
 
 func (x *Version) Reset() {
 	*x = Version{}
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[2]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -195,7 +277,7 @@ func (x *Version) String() string {
 func (*Version) ProtoMessage() {}
 
 func (x *Version) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[2]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -208,7 +290,7 @@ func (x *Version) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Version.ProtoReflect.Descriptor instead.
 func (*Version) Descriptor() ([]byte, []int) {
-	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{2}
+	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *Version) GetDocument() string {
@@ -262,7 +344,7 @@ type ListDocumentsRequest struct {
 
 func (x *ListDocumentsRequest) Reset() {
 	*x = ListDocumentsRequest{}
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[3]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -274,7 +356,7 @@ func (x *ListDocumentsRequest) String() string {
 func (*ListDocumentsRequest) ProtoMessage() {}
 
 func (x *ListDocumentsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[3]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -287,7 +369,7 @@ func (x *ListDocumentsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListDocumentsRequest.ProtoReflect.Descriptor instead.
 func (*ListDocumentsRequest) Descriptor() ([]byte, []int) {
-	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{3}
+	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *ListDocumentsRequest) GetAudience() string {
@@ -306,7 +388,7 @@ type ListDocumentsResponse struct {
 
 func (x *ListDocumentsResponse) Reset() {
 	*x = ListDocumentsResponse{}
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[4]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -318,7 +400,7 @@ func (x *ListDocumentsResponse) String() string {
 func (*ListDocumentsResponse) ProtoMessage() {}
 
 func (x *ListDocumentsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[4]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -331,7 +413,7 @@ func (x *ListDocumentsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListDocumentsResponse.ProtoReflect.Descriptor instead.
 func (*ListDocumentsResponse) Descriptor() ([]byte, []int) {
-	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{4}
+	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *ListDocumentsResponse) GetDocuments() []*Document {
@@ -350,7 +432,7 @@ type CreateDocumentRequest struct {
 
 func (x *CreateDocumentRequest) Reset() {
 	*x = CreateDocumentRequest{}
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[5]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -362,7 +444,7 @@ func (x *CreateDocumentRequest) String() string {
 func (*CreateDocumentRequest) ProtoMessage() {}
 
 func (x *CreateDocumentRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[5]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -375,7 +457,7 @@ func (x *CreateDocumentRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateDocumentRequest.ProtoReflect.Descriptor instead.
 func (*CreateDocumentRequest) Descriptor() ([]byte, []int) {
-	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{5}
+	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *CreateDocumentRequest) GetDocument() *Document {
@@ -393,7 +475,7 @@ type CreateDocumentResponse struct {
 
 func (x *CreateDocumentResponse) Reset() {
 	*x = CreateDocumentResponse{}
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[6]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -405,7 +487,7 @@ func (x *CreateDocumentResponse) String() string {
 func (*CreateDocumentResponse) ProtoMessage() {}
 
 func (x *CreateDocumentResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[6]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -418,7 +500,7 @@ func (x *CreateDocumentResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateDocumentResponse.ProtoReflect.Descriptor instead.
 func (*CreateDocumentResponse) Descriptor() ([]byte, []int) {
-	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{6}
+	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{8}
 }
 
 type GetVersionsRequest struct {
@@ -430,7 +512,7 @@ type GetVersionsRequest struct {
 
 func (x *GetVersionsRequest) Reset() {
 	*x = GetVersionsRequest{}
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[7]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -442,7 +524,7 @@ func (x *GetVersionsRequest) String() string {
 func (*GetVersionsRequest) ProtoMessage() {}
 
 func (x *GetVersionsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[7]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -455,7 +537,7 @@ func (x *GetVersionsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetVersionsRequest.ProtoReflect.Descriptor instead.
 func (*GetVersionsRequest) Descriptor() ([]byte, []int) {
-	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{7}
+	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *GetVersionsRequest) GetDocument() string {
@@ -474,7 +556,7 @@ type GetVersionsResponse struct {
 
 func (x *GetVersionsResponse) Reset() {
 	*x = GetVersionsResponse{}
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[8]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -486,7 +568,7 @@ func (x *GetVersionsResponse) String() string {
 func (*GetVersionsResponse) ProtoMessage() {}
 
 func (x *GetVersionsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[8]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -499,7 +581,7 @@ func (x *GetVersionsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetVersionsResponse.ProtoReflect.Descriptor instead.
 func (*GetVersionsResponse) Descriptor() ([]byte, []int) {
-	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{8}
+	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *GetVersionsResponse) GetVersions() []*Version {
@@ -518,7 +600,7 @@ type SaveDraftRequest struct {
 
 func (x *SaveDraftRequest) Reset() {
 	*x = SaveDraftRequest{}
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[9]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -530,7 +612,7 @@ func (x *SaveDraftRequest) String() string {
 func (*SaveDraftRequest) ProtoMessage() {}
 
 func (x *SaveDraftRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[9]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -543,7 +625,7 @@ func (x *SaveDraftRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SaveDraftRequest.ProtoReflect.Descriptor instead.
 func (*SaveDraftRequest) Descriptor() ([]byte, []int) {
-	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{9}
+	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *SaveDraftRequest) GetVersion() *Version {
@@ -562,7 +644,7 @@ type SaveDraftResponse struct {
 
 func (x *SaveDraftResponse) Reset() {
 	*x = SaveDraftResponse{}
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[10]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -574,7 +656,7 @@ func (x *SaveDraftResponse) String() string {
 func (*SaveDraftResponse) ProtoMessage() {}
 
 func (x *SaveDraftResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[10]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -587,7 +669,7 @@ func (x *SaveDraftResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SaveDraftResponse.ProtoReflect.Descriptor instead.
 func (*SaveDraftResponse) Descriptor() ([]byte, []int) {
-	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{10}
+	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *SaveDraftResponse) GetVersion() *Version {
@@ -607,7 +689,7 @@ type PublishRequest struct {
 
 func (x *PublishRequest) Reset() {
 	*x = PublishRequest{}
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[11]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -619,7 +701,7 @@ func (x *PublishRequest) String() string {
 func (*PublishRequest) ProtoMessage() {}
 
 func (x *PublishRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[11]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -632,7 +714,7 @@ func (x *PublishRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PublishRequest.ProtoReflect.Descriptor instead.
 func (*PublishRequest) Descriptor() ([]byte, []int) {
-	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{11}
+	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *PublishRequest) GetDocument() string {
@@ -658,7 +740,7 @@ type PublishResponse struct {
 
 func (x *PublishResponse) Reset() {
 	*x = PublishResponse{}
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[12]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -670,7 +752,7 @@ func (x *PublishResponse) String() string {
 func (*PublishResponse) ProtoMessage() {}
 
 func (x *PublishResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[12]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -683,7 +765,7 @@ func (x *PublishResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PublishResponse.ProtoReflect.Descriptor instead.
 func (*PublishResponse) Descriptor() ([]byte, []int) {
-	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{12}
+	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *PublishResponse) GetVersion() *Version {
@@ -707,7 +789,7 @@ type Filter struct {
 
 func (x *Filter) Reset() {
 	*x = Filter{}
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[13]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -719,7 +801,7 @@ func (x *Filter) String() string {
 func (*Filter) ProtoMessage() {}
 
 func (x *Filter) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[13]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -732,7 +814,7 @@ func (x *Filter) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Filter.ProtoReflect.Descriptor instead.
 func (*Filter) Descriptor() ([]byte, []int) {
-	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{13}
+	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *Filter) GetSubject() string {
@@ -791,7 +873,7 @@ type Record struct {
 
 func (x *Record) Reset() {
 	*x = Record{}
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[14]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -803,7 +885,7 @@ func (x *Record) String() string {
 func (*Record) ProtoMessage() {}
 
 func (x *Record) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[14]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -816,7 +898,7 @@ func (x *Record) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Record.ProtoReflect.Descriptor instead.
 func (*Record) Descriptor() ([]byte, []int) {
-	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{14}
+	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *Record) GetId() string {
@@ -912,7 +994,7 @@ type JournalRequest struct {
 
 func (x *JournalRequest) Reset() {
 	*x = JournalRequest{}
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[15]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -924,7 +1006,7 @@ func (x *JournalRequest) String() string {
 func (*JournalRequest) ProtoMessage() {}
 
 func (x *JournalRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[15]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -937,7 +1019,7 @@ func (x *JournalRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use JournalRequest.ProtoReflect.Descriptor instead.
 func (*JournalRequest) Descriptor() ([]byte, []int) {
-	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{15}
+	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *JournalRequest) GetFilter() *Filter {
@@ -956,7 +1038,7 @@ type JournalResponse struct {
 
 func (x *JournalResponse) Reset() {
 	*x = JournalResponse{}
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[16]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -968,7 +1050,7 @@ func (x *JournalResponse) String() string {
 func (*JournalResponse) ProtoMessage() {}
 
 func (x *JournalResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[16]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -981,7 +1063,7 @@ func (x *JournalResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use JournalResponse.ProtoReflect.Descriptor instead.
 func (*JournalResponse) Descriptor() ([]byte, []int) {
-	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{16}
+	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *JournalResponse) GetRecords() []*Record {
@@ -1001,7 +1083,7 @@ type VerifyRequest struct {
 
 func (x *VerifyRequest) Reset() {
 	*x = VerifyRequest{}
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[17]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1013,7 +1095,7 @@ func (x *VerifyRequest) String() string {
 func (*VerifyRequest) ProtoMessage() {}
 
 func (x *VerifyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[17]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1026,7 +1108,7 @@ func (x *VerifyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VerifyRequest.ProtoReflect.Descriptor instead.
 func (*VerifyRequest) Descriptor() ([]byte, []int) {
-	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{17}
+	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *VerifyRequest) GetFrom() int64 {
@@ -1054,7 +1136,7 @@ type VerifyResponse struct {
 
 func (x *VerifyResponse) Reset() {
 	*x = VerifyResponse{}
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[18]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1066,7 +1148,7 @@ func (x *VerifyResponse) String() string {
 func (*VerifyResponse) ProtoMessage() {}
 
 func (x *VerifyResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[18]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1079,7 +1161,7 @@ func (x *VerifyResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VerifyResponse.ProtoReflect.Descriptor instead.
 func (*VerifyResponse) Descriptor() ([]byte, []int) {
-	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{18}
+	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *VerifyResponse) GetOk() bool {
@@ -1114,7 +1196,7 @@ type ExportRequest struct {
 
 func (x *ExportRequest) Reset() {
 	*x = ExportRequest{}
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[19]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1126,7 +1208,7 @@ func (x *ExportRequest) String() string {
 func (*ExportRequest) ProtoMessage() {}
 
 func (x *ExportRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[19]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1139,7 +1221,7 @@ func (x *ExportRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExportRequest.ProtoReflect.Descriptor instead.
 func (*ExportRequest) Descriptor() ([]byte, []int) {
-	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{19}
+	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *ExportRequest) GetFilter() *Filter {
@@ -1167,7 +1249,7 @@ type ExportResponse struct {
 
 func (x *ExportResponse) Reset() {
 	*x = ExportResponse{}
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[20]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1179,7 +1261,7 @@ func (x *ExportResponse) String() string {
 func (*ExportResponse) ProtoMessage() {}
 
 func (x *ExportResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[20]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1192,7 +1274,7 @@ func (x *ExportResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExportResponse.ProtoReflect.Descriptor instead.
 func (*ExportResponse) Descriptor() ([]byte, []int) {
-	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{20}
+	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *ExportResponse) GetData() []byte {
@@ -1225,7 +1307,7 @@ type PreviewRequest struct {
 
 func (x *PreviewRequest) Reset() {
 	*x = PreviewRequest{}
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[21]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1237,7 +1319,7 @@ func (x *PreviewRequest) String() string {
 func (*PreviewRequest) ProtoMessage() {}
 
 func (x *PreviewRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[21]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1250,7 +1332,7 @@ func (x *PreviewRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PreviewRequest.ProtoReflect.Descriptor instead.
 func (*PreviewRequest) Descriptor() ([]byte, []int) {
-	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{21}
+	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *PreviewRequest) GetMarkdown() string {
@@ -1269,7 +1351,7 @@ type PreviewResponse struct {
 
 func (x *PreviewResponse) Reset() {
 	*x = PreviewResponse{}
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[22]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1281,7 +1363,7 @@ func (x *PreviewResponse) String() string {
 func (*PreviewResponse) ProtoMessage() {}
 
 func (x *PreviewResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[22]
+	mi := &file_proto_legal_console_v1_admin_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1294,7 +1376,7 @@ func (x *PreviewResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PreviewResponse.ProtoReflect.Descriptor instead.
 func (*PreviewResponse) Descriptor() ([]byte, []int) {
-	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{22}
+	return file_proto_legal_console_v1_admin_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *PreviewResponse) GetHtml() string {
@@ -1308,7 +1390,10 @@ var File_proto_legal_console_v1_admin_proto protoreflect.FileDescriptor
 
 const file_proto_legal_console_v1_admin_proto_rawDesc = "" +
 	"\n" +
-	"\"proto/legal/console/v1/admin.proto\x12\x10legal.console.v1\"y\n" +
+	"\"proto/legal/console/v1/admin.proto\x12\x10legal.console.v1\"\x14\n" +
+	"\x12GetSettingsRequest\":\n" +
+	"\x13GetSettingsResponse\x12#\n" +
+	"\rrequired_only\x18\x01 \x01(\bR\frequiredOnly\"y\n" +
 	"\bDocument\x12\x12\n" +
 	"\x04slug\x18\x01 \x01(\tR\x04slug\x12\x1a\n" +
 	"\baudience\x18\x02 \x01(\tR\baudience\x12\x1a\n" +
@@ -1394,7 +1479,7 @@ const file_proto_legal_console_v1_admin_proto_rawDesc = "" +
 	"\x0ePreviewRequest\x12\x1a\n" +
 	"\bmarkdown\x18\x01 \x01(\tR\bmarkdown\"%\n" +
 	"\x0fPreviewResponse\x12\x12\n" +
-	"\x04html\x18\x01 \x01(\tR\x04html2\x91\x06\n" +
+	"\x04html\x18\x01 \x01(\tR\x04html2\xed\x06\n" +
 	"\fAdminService\x12`\n" +
 	"\rListDocuments\x12&.legal.console.v1.ListDocumentsRequest\x1a'.legal.console.v1.ListDocumentsResponse\x12c\n" +
 	"\x0eCreateDocument\x12'.legal.console.v1.CreateDocumentRequest\x1a(.legal.console.v1.CreateDocumentResponse\x12Z\n" +
@@ -1404,7 +1489,8 @@ const file_proto_legal_console_v1_admin_proto_rawDesc = "" +
 	"\aJournal\x12 .legal.console.v1.JournalRequest\x1a!.legal.console.v1.JournalResponse\x12K\n" +
 	"\x06Verify\x12\x1f.legal.console.v1.VerifyRequest\x1a .legal.console.v1.VerifyResponse\x12K\n" +
 	"\x06Export\x12\x1f.legal.console.v1.ExportRequest\x1a .legal.console.v1.ExportResponse\x12N\n" +
-	"\aPreview\x12 .legal.console.v1.PreviewRequest\x1a!.legal.console.v1.PreviewResponseBQZOgithub.com/backplane-labs/backplane-legal/proto/legal/console/v1;legalconsolev1b\x06proto3"
+	"\aPreview\x12 .legal.console.v1.PreviewRequest\x1a!.legal.console.v1.PreviewResponse\x12Z\n" +
+	"\vGetSettings\x12$.legal.console.v1.GetSettingsRequest\x1a%.legal.console.v1.GetSettingsResponseBQZOgithub.com/backplane-labs/backplane-legal/proto/legal/console/v1;legalconsolev1b\x06proto3"
 
 var (
 	file_proto_legal_console_v1_admin_proto_rawDescOnce sync.Once
@@ -1418,65 +1504,69 @@ func file_proto_legal_console_v1_admin_proto_rawDescGZIP() []byte {
 	return file_proto_legal_console_v1_admin_proto_rawDescData
 }
 
-var file_proto_legal_console_v1_admin_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
+var file_proto_legal_console_v1_admin_proto_msgTypes = make([]protoimpl.MessageInfo, 26)
 var file_proto_legal_console_v1_admin_proto_goTypes = []any{
-	(*Document)(nil),               // 0: legal.console.v1.Document
-	(*Text)(nil),                   // 1: legal.console.v1.Text
-	(*Version)(nil),                // 2: legal.console.v1.Version
-	(*ListDocumentsRequest)(nil),   // 3: legal.console.v1.ListDocumentsRequest
-	(*ListDocumentsResponse)(nil),  // 4: legal.console.v1.ListDocumentsResponse
-	(*CreateDocumentRequest)(nil),  // 5: legal.console.v1.CreateDocumentRequest
-	(*CreateDocumentResponse)(nil), // 6: legal.console.v1.CreateDocumentResponse
-	(*GetVersionsRequest)(nil),     // 7: legal.console.v1.GetVersionsRequest
-	(*GetVersionsResponse)(nil),    // 8: legal.console.v1.GetVersionsResponse
-	(*SaveDraftRequest)(nil),       // 9: legal.console.v1.SaveDraftRequest
-	(*SaveDraftResponse)(nil),      // 10: legal.console.v1.SaveDraftResponse
-	(*PublishRequest)(nil),         // 11: legal.console.v1.PublishRequest
-	(*PublishResponse)(nil),        // 12: legal.console.v1.PublishResponse
-	(*Filter)(nil),                 // 13: legal.console.v1.Filter
-	(*Record)(nil),                 // 14: legal.console.v1.Record
-	(*JournalRequest)(nil),         // 15: legal.console.v1.JournalRequest
-	(*JournalResponse)(nil),        // 16: legal.console.v1.JournalResponse
-	(*VerifyRequest)(nil),          // 17: legal.console.v1.VerifyRequest
-	(*VerifyResponse)(nil),         // 18: legal.console.v1.VerifyResponse
-	(*ExportRequest)(nil),          // 19: legal.console.v1.ExportRequest
-	(*ExportResponse)(nil),         // 20: legal.console.v1.ExportResponse
-	(*PreviewRequest)(nil),         // 21: legal.console.v1.PreviewRequest
-	(*PreviewResponse)(nil),        // 22: legal.console.v1.PreviewResponse
-	nil,                            // 23: legal.console.v1.Record.ContextEntry
+	(*GetSettingsRequest)(nil),     // 0: legal.console.v1.GetSettingsRequest
+	(*GetSettingsResponse)(nil),    // 1: legal.console.v1.GetSettingsResponse
+	(*Document)(nil),               // 2: legal.console.v1.Document
+	(*Text)(nil),                   // 3: legal.console.v1.Text
+	(*Version)(nil),                // 4: legal.console.v1.Version
+	(*ListDocumentsRequest)(nil),   // 5: legal.console.v1.ListDocumentsRequest
+	(*ListDocumentsResponse)(nil),  // 6: legal.console.v1.ListDocumentsResponse
+	(*CreateDocumentRequest)(nil),  // 7: legal.console.v1.CreateDocumentRequest
+	(*CreateDocumentResponse)(nil), // 8: legal.console.v1.CreateDocumentResponse
+	(*GetVersionsRequest)(nil),     // 9: legal.console.v1.GetVersionsRequest
+	(*GetVersionsResponse)(nil),    // 10: legal.console.v1.GetVersionsResponse
+	(*SaveDraftRequest)(nil),       // 11: legal.console.v1.SaveDraftRequest
+	(*SaveDraftResponse)(nil),      // 12: legal.console.v1.SaveDraftResponse
+	(*PublishRequest)(nil),         // 13: legal.console.v1.PublishRequest
+	(*PublishResponse)(nil),        // 14: legal.console.v1.PublishResponse
+	(*Filter)(nil),                 // 15: legal.console.v1.Filter
+	(*Record)(nil),                 // 16: legal.console.v1.Record
+	(*JournalRequest)(nil),         // 17: legal.console.v1.JournalRequest
+	(*JournalResponse)(nil),        // 18: legal.console.v1.JournalResponse
+	(*VerifyRequest)(nil),          // 19: legal.console.v1.VerifyRequest
+	(*VerifyResponse)(nil),         // 20: legal.console.v1.VerifyResponse
+	(*ExportRequest)(nil),          // 21: legal.console.v1.ExportRequest
+	(*ExportResponse)(nil),         // 22: legal.console.v1.ExportResponse
+	(*PreviewRequest)(nil),         // 23: legal.console.v1.PreviewRequest
+	(*PreviewResponse)(nil),        // 24: legal.console.v1.PreviewResponse
+	nil,                            // 25: legal.console.v1.Record.ContextEntry
 }
 var file_proto_legal_console_v1_admin_proto_depIdxs = []int32{
-	1,  // 0: legal.console.v1.Version.texts:type_name -> legal.console.v1.Text
-	0,  // 1: legal.console.v1.ListDocumentsResponse.documents:type_name -> legal.console.v1.Document
-	0,  // 2: legal.console.v1.CreateDocumentRequest.document:type_name -> legal.console.v1.Document
-	2,  // 3: legal.console.v1.GetVersionsResponse.versions:type_name -> legal.console.v1.Version
-	2,  // 4: legal.console.v1.SaveDraftRequest.version:type_name -> legal.console.v1.Version
-	2,  // 5: legal.console.v1.SaveDraftResponse.version:type_name -> legal.console.v1.Version
-	2,  // 6: legal.console.v1.PublishResponse.version:type_name -> legal.console.v1.Version
-	23, // 7: legal.console.v1.Record.context:type_name -> legal.console.v1.Record.ContextEntry
-	13, // 8: legal.console.v1.JournalRequest.filter:type_name -> legal.console.v1.Filter
-	14, // 9: legal.console.v1.JournalResponse.records:type_name -> legal.console.v1.Record
-	13, // 10: legal.console.v1.ExportRequest.filter:type_name -> legal.console.v1.Filter
-	3,  // 11: legal.console.v1.AdminService.ListDocuments:input_type -> legal.console.v1.ListDocumentsRequest
-	5,  // 12: legal.console.v1.AdminService.CreateDocument:input_type -> legal.console.v1.CreateDocumentRequest
-	7,  // 13: legal.console.v1.AdminService.GetVersions:input_type -> legal.console.v1.GetVersionsRequest
-	9,  // 14: legal.console.v1.AdminService.SaveDraft:input_type -> legal.console.v1.SaveDraftRequest
-	11, // 15: legal.console.v1.AdminService.Publish:input_type -> legal.console.v1.PublishRequest
-	15, // 16: legal.console.v1.AdminService.Journal:input_type -> legal.console.v1.JournalRequest
-	17, // 17: legal.console.v1.AdminService.Verify:input_type -> legal.console.v1.VerifyRequest
-	19, // 18: legal.console.v1.AdminService.Export:input_type -> legal.console.v1.ExportRequest
-	21, // 19: legal.console.v1.AdminService.Preview:input_type -> legal.console.v1.PreviewRequest
-	4,  // 20: legal.console.v1.AdminService.ListDocuments:output_type -> legal.console.v1.ListDocumentsResponse
-	6,  // 21: legal.console.v1.AdminService.CreateDocument:output_type -> legal.console.v1.CreateDocumentResponse
-	8,  // 22: legal.console.v1.AdminService.GetVersions:output_type -> legal.console.v1.GetVersionsResponse
-	10, // 23: legal.console.v1.AdminService.SaveDraft:output_type -> legal.console.v1.SaveDraftResponse
-	12, // 24: legal.console.v1.AdminService.Publish:output_type -> legal.console.v1.PublishResponse
-	16, // 25: legal.console.v1.AdminService.Journal:output_type -> legal.console.v1.JournalResponse
-	18, // 26: legal.console.v1.AdminService.Verify:output_type -> legal.console.v1.VerifyResponse
-	20, // 27: legal.console.v1.AdminService.Export:output_type -> legal.console.v1.ExportResponse
-	22, // 28: legal.console.v1.AdminService.Preview:output_type -> legal.console.v1.PreviewResponse
-	20, // [20:29] is the sub-list for method output_type
-	11, // [11:20] is the sub-list for method input_type
+	3,  // 0: legal.console.v1.Version.texts:type_name -> legal.console.v1.Text
+	2,  // 1: legal.console.v1.ListDocumentsResponse.documents:type_name -> legal.console.v1.Document
+	2,  // 2: legal.console.v1.CreateDocumentRequest.document:type_name -> legal.console.v1.Document
+	4,  // 3: legal.console.v1.GetVersionsResponse.versions:type_name -> legal.console.v1.Version
+	4,  // 4: legal.console.v1.SaveDraftRequest.version:type_name -> legal.console.v1.Version
+	4,  // 5: legal.console.v1.SaveDraftResponse.version:type_name -> legal.console.v1.Version
+	4,  // 6: legal.console.v1.PublishResponse.version:type_name -> legal.console.v1.Version
+	25, // 7: legal.console.v1.Record.context:type_name -> legal.console.v1.Record.ContextEntry
+	15, // 8: legal.console.v1.JournalRequest.filter:type_name -> legal.console.v1.Filter
+	16, // 9: legal.console.v1.JournalResponse.records:type_name -> legal.console.v1.Record
+	15, // 10: legal.console.v1.ExportRequest.filter:type_name -> legal.console.v1.Filter
+	5,  // 11: legal.console.v1.AdminService.ListDocuments:input_type -> legal.console.v1.ListDocumentsRequest
+	7,  // 12: legal.console.v1.AdminService.CreateDocument:input_type -> legal.console.v1.CreateDocumentRequest
+	9,  // 13: legal.console.v1.AdminService.GetVersions:input_type -> legal.console.v1.GetVersionsRequest
+	11, // 14: legal.console.v1.AdminService.SaveDraft:input_type -> legal.console.v1.SaveDraftRequest
+	13, // 15: legal.console.v1.AdminService.Publish:input_type -> legal.console.v1.PublishRequest
+	17, // 16: legal.console.v1.AdminService.Journal:input_type -> legal.console.v1.JournalRequest
+	19, // 17: legal.console.v1.AdminService.Verify:input_type -> legal.console.v1.VerifyRequest
+	21, // 18: legal.console.v1.AdminService.Export:input_type -> legal.console.v1.ExportRequest
+	23, // 19: legal.console.v1.AdminService.Preview:input_type -> legal.console.v1.PreviewRequest
+	0,  // 20: legal.console.v1.AdminService.GetSettings:input_type -> legal.console.v1.GetSettingsRequest
+	6,  // 21: legal.console.v1.AdminService.ListDocuments:output_type -> legal.console.v1.ListDocumentsResponse
+	8,  // 22: legal.console.v1.AdminService.CreateDocument:output_type -> legal.console.v1.CreateDocumentResponse
+	10, // 23: legal.console.v1.AdminService.GetVersions:output_type -> legal.console.v1.GetVersionsResponse
+	12, // 24: legal.console.v1.AdminService.SaveDraft:output_type -> legal.console.v1.SaveDraftResponse
+	14, // 25: legal.console.v1.AdminService.Publish:output_type -> legal.console.v1.PublishResponse
+	18, // 26: legal.console.v1.AdminService.Journal:output_type -> legal.console.v1.JournalResponse
+	20, // 27: legal.console.v1.AdminService.Verify:output_type -> legal.console.v1.VerifyResponse
+	22, // 28: legal.console.v1.AdminService.Export:output_type -> legal.console.v1.ExportResponse
+	24, // 29: legal.console.v1.AdminService.Preview:output_type -> legal.console.v1.PreviewResponse
+	1,  // 30: legal.console.v1.AdminService.GetSettings:output_type -> legal.console.v1.GetSettingsResponse
+	21, // [21:31] is the sub-list for method output_type
+	11, // [11:21] is the sub-list for method input_type
 	11, // [11:11] is the sub-list for extension type_name
 	11, // [11:11] is the sub-list for extension extendee
 	0,  // [0:11] is the sub-list for field type_name
@@ -1493,7 +1583,7 @@ func file_proto_legal_console_v1_admin_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_legal_console_v1_admin_proto_rawDesc), len(file_proto_legal_console_v1_admin_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   24,
+			NumMessages:   26,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

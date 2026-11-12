@@ -40,7 +40,7 @@ func TestPostgresEvidence(t *testing.T) {
 	}
 
 	repo := dependency.Get()
-	service := app.New(repo, "en")
+	service := app.New(repo, "en", app.AnyDocuments)
 
 	slug := "consent-" + strings.ReplaceAll(uuid.NewString(), "-", "")
 	if err := service.CreateDocument(t.Context(), domain.Document{Slug: slug, Audience: domain.AudienceAll}); err != nil {

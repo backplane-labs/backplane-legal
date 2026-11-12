@@ -10,7 +10,40 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file proto/legal/console/v1/admin.proto.
  */
 export const file_proto_legal_console_v1_admin: GenFile = /*@__PURE__*/
-  fileDesc("CiJwcm90by9sZWdhbC9jb25zb2xlL3YxL2FkbWluLnByb3RvEhBsZWdhbC5jb25zb2xlLnYxIlIKCERvY3VtZW50EgwKBHNsdWcYASABKAkSEAoIYXVkaWVuY2UYAiABKAkSEAoIcmVxdWlyZWQYAyABKAgSFAoMZGVmYXVsdF9sYW5nGAQgASgJIlQKBFRleHQSDAoEbGFuZxgBIAEoCRINCgV0aXRsZRgCIAEoCRIMCgRib2R5GAMgASgJEgsKA3VybBgEIAEoCRIUCgxjb250ZW50X2hhc2gYBSABKAkijQEKB1ZlcnNpb24SEAoIZG9jdW1lbnQYASABKAkSDgoGbnVtYmVyGAIgASgDEhQKDGVmZmVjdGl2ZV9hdBgDIAEoCRITCgtjaGFuZ2Vfbm90ZRgEIAEoCRIOCgZzdGF0dXMYBSABKAkSJQoFdGV4dHMYBiADKAsyFi5sZWdhbC5jb25zb2xlLnYxLlRleHQiKAoUTGlzdERvY3VtZW50c1JlcXVlc3QSEAoIYXVkaWVuY2UYASABKAkiRgoVTGlzdERvY3VtZW50c1Jlc3BvbnNlEi0KCWRvY3VtZW50cxgBIAMoCzIaLmxlZ2FsLmNvbnNvbGUudjEuRG9jdW1lbnQiRQoVQ3JlYXRlRG9jdW1lbnRSZXF1ZXN0EiwKCGRvY3VtZW50GAEgASgLMhoubGVnYWwuY29uc29sZS52MS5Eb2N1bWVudCIYChZDcmVhdGVEb2N1bWVudFJlc3BvbnNlIiYKEkdldFZlcnNpb25zUmVxdWVzdBIQCghkb2N1bWVudBgBIAEoCSJCChNHZXRWZXJzaW9uc1Jlc3BvbnNlEisKCHZlcnNpb25zGAEgAygLMhkubGVnYWwuY29uc29sZS52MS5WZXJzaW9uIj4KEFNhdmVEcmFmdFJlcXVlc3QSKgoHdmVyc2lvbhgBIAEoCzIZLmxlZ2FsLmNvbnNvbGUudjEuVmVyc2lvbiI/ChFTYXZlRHJhZnRSZXNwb25zZRIqCgd2ZXJzaW9uGAEgASgLMhkubGVnYWwuY29uc29sZS52MS5WZXJzaW9uIjIKDlB1Ymxpc2hSZXF1ZXN0EhAKCGRvY3VtZW50GAEgASgJEg4KBm51bWJlchgCIAEoAyI9Cg9QdWJsaXNoUmVzcG9uc2USKgoHdmVyc2lvbhgBIAEoCzIZLmxlZ2FsLmNvbnNvbGUudjEuVmVyc2lvbiJWCgZGaWx0ZXISDwoHc3ViamVjdBgBIAEoCRIQCghkb2N1bWVudBgCIAEoCRIPCgd2ZXJzaW9uGAMgASgDEgwKBGZyb20YBCABKAkSCgoCdG8YBSABKAkipQIKBlJlY29yZBIKCgJpZBgBIAEoCRILCgNzZXEYAiABKAMSDwoHc3ViamVjdBgDIAEoCRIQCghkb2N1bWVudBgEIAEoCRIPCgd2ZXJzaW9uGAUgASgDEgwKBGxhbmcYBiABKAkSFAoMY29udGVudF9oYXNoGAcgASgJEgwKBGtpbmQYCCABKAkSEwoLYWNjZXB0ZWRfYXQYCSABKAkSNgoHY29udGV4dBgKIAMoCzIlLmxlZ2FsLmNvbnNvbGUudjEuUmVjb3JkLkNvbnRleHRFbnRyeRIRCglwcmV2X2hhc2gYCyABKAkSDAoEaGFzaBgMIAEoCRouCgxDb250ZXh0RW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgJOgI4ASI6Cg5Kb3VybmFsUmVxdWVzdBIoCgZmaWx0ZXIYASABKAsyGC5sZWdhbC5jb25zb2xlLnYxLkZpbHRlciI8Cg9Kb3VybmFsUmVzcG9uc2USKQoHcmVjb3JkcxgBIAMoCzIYLmxlZ2FsLmNvbnNvbGUudjEuUmVjb3JkIikKDVZlcmlmeVJlcXVlc3QSDAoEZnJvbRgBIAEoAxIKCgJ0bxgCIAEoAyJBCg5WZXJpZnlSZXNwb25zZRIKCgJvaxgBIAEoCBISCgpicm9rZW5fc2VxGAIgASgDEg8KB2NoZWNrZWQYAyABKAMiSQoNRXhwb3J0UmVxdWVzdBIoCgZmaWx0ZXIYASABKAsyGC5sZWdhbC5jb25zb2xlLnYxLkZpbHRlchIOCgZmb3JtYXQYAiABKAkiRgoORXhwb3J0UmVzcG9uc2USDAoEZGF0YRgBIAEoDBIUCgxjb250ZW50X3R5cGUYAiABKAkSEAoIZmlsZW5hbWUYAyABKAkiIgoOUHJldmlld1JlcXVlc3QSEAoIbWFya2Rvd24YASABKAkiHwoPUHJldmlld1Jlc3BvbnNlEgwKBGh0bWwYASABKAkykQYKDEFkbWluU2VydmljZRJgCg1MaXN0RG9jdW1lbnRzEiYubGVnYWwuY29uc29sZS52MS5MaXN0RG9jdW1lbnRzUmVxdWVzdBonLmxlZ2FsLmNvbnNvbGUudjEuTGlzdERvY3VtZW50c1Jlc3BvbnNlEmMKDkNyZWF0ZURvY3VtZW50EicubGVnYWwuY29uc29sZS52MS5DcmVhdGVEb2N1bWVudFJlcXVlc3QaKC5sZWdhbC5jb25zb2xlLnYxLkNyZWF0ZURvY3VtZW50UmVzcG9uc2USWgoLR2V0VmVyc2lvbnMSJC5sZWdhbC5jb25zb2xlLnYxLkdldFZlcnNpb25zUmVxdWVzdBolLmxlZ2FsLmNvbnNvbGUudjEuR2V0VmVyc2lvbnNSZXNwb25zZRJUCglTYXZlRHJhZnQSIi5sZWdhbC5jb25zb2xlLnYxLlNhdmVEcmFmdFJlcXVlc3QaIy5sZWdhbC5jb25zb2xlLnYxLlNhdmVEcmFmdFJlc3BvbnNlEk4KB1B1Ymxpc2gSIC5sZWdhbC5jb25zb2xlLnYxLlB1Ymxpc2hSZXF1ZXN0GiEubGVnYWwuY29uc29sZS52MS5QdWJsaXNoUmVzcG9uc2USTgoHSm91cm5hbBIgLmxlZ2FsLmNvbnNvbGUudjEuSm91cm5hbFJlcXVlc3QaIS5sZWdhbC5jb25zb2xlLnYxLkpvdXJuYWxSZXNwb25zZRJLCgZWZXJpZnkSHy5sZWdhbC5jb25zb2xlLnYxLlZlcmlmeVJlcXVlc3QaIC5sZWdhbC5jb25zb2xlLnYxLlZlcmlmeVJlc3BvbnNlEksKBkV4cG9ydBIfLmxlZ2FsLmNvbnNvbGUudjEuRXhwb3J0UmVxdWVzdBogLmxlZ2FsLmNvbnNvbGUudjEuRXhwb3J0UmVzcG9uc2USTgoHUHJldmlldxIgLmxlZ2FsLmNvbnNvbGUudjEuUHJldmlld1JlcXVlc3QaIS5sZWdhbC5jb25zb2xlLnYxLlByZXZpZXdSZXNwb25zZUJRWk9naXRodWIuY29tL2JhY2twbGFuZS1sYWJzL2JhY2twbGFuZS1sZWdhbC9wcm90by9sZWdhbC9jb25zb2xlL3YxO2xlZ2FsY29uc29sZXYxYgZwcm90bzM");
+  fileDesc("CiJwcm90by9sZWdhbC9jb25zb2xlL3YxL2FkbWluLnByb3RvEhBsZWdhbC5jb25zb2xlLnYxIhQKEkdldFNldHRpbmdzUmVxdWVzdCIsChNHZXRTZXR0aW5nc1Jlc3BvbnNlEhUKDXJlcXVpcmVkX29ubHkYASABKAgiUgoIRG9jdW1lbnQSDAoEc2x1ZxgBIAEoCRIQCghhdWRpZW5jZRgCIAEoCRIQCghyZXF1aXJlZBgDIAEoCBIUCgxkZWZhdWx0X2xhbmcYBCABKAkiVAoEVGV4dBIMCgRsYW5nGAEgASgJEg0KBXRpdGxlGAIgASgJEgwKBGJvZHkYAyABKAkSCwoDdXJsGAQgASgJEhQKDGNvbnRlbnRfaGFzaBgFIAEoCSKNAQoHVmVyc2lvbhIQCghkb2N1bWVudBgBIAEoCRIOCgZudW1iZXIYAiABKAMSFAoMZWZmZWN0aXZlX2F0GAMgASgJEhMKC2NoYW5nZV9ub3RlGAQgASgJEg4KBnN0YXR1cxgFIAEoCRIlCgV0ZXh0cxgGIAMoCzIWLmxlZ2FsLmNvbnNvbGUudjEuVGV4dCIoChRMaXN0RG9jdW1lbnRzUmVxdWVzdBIQCghhdWRpZW5jZRgBIAEoCSJGChVMaXN0RG9jdW1lbnRzUmVzcG9uc2USLQoJZG9jdW1lbnRzGAEgAygLMhoubGVnYWwuY29uc29sZS52MS5Eb2N1bWVudCJFChVDcmVhdGVEb2N1bWVudFJlcXVlc3QSLAoIZG9jdW1lbnQYASABKAsyGi5sZWdhbC5jb25zb2xlLnYxLkRvY3VtZW50IhgKFkNyZWF0ZURvY3VtZW50UmVzcG9uc2UiJgoSR2V0VmVyc2lvbnNSZXF1ZXN0EhAKCGRvY3VtZW50GAEgASgJIkIKE0dldFZlcnNpb25zUmVzcG9uc2USKwoIdmVyc2lvbnMYASADKAsyGS5sZWdhbC5jb25zb2xlLnYxLlZlcnNpb24iPgoQU2F2ZURyYWZ0UmVxdWVzdBIqCgd2ZXJzaW9uGAEgASgLMhkubGVnYWwuY29uc29sZS52MS5WZXJzaW9uIj8KEVNhdmVEcmFmdFJlc3BvbnNlEioKB3ZlcnNpb24YASABKAsyGS5sZWdhbC5jb25zb2xlLnYxLlZlcnNpb24iMgoOUHVibGlzaFJlcXVlc3QSEAoIZG9jdW1lbnQYASABKAkSDgoGbnVtYmVyGAIgASgDIj0KD1B1Ymxpc2hSZXNwb25zZRIqCgd2ZXJzaW9uGAEgASgLMhkubGVnYWwuY29uc29sZS52MS5WZXJzaW9uIlYKBkZpbHRlchIPCgdzdWJqZWN0GAEgASgJEhAKCGRvY3VtZW50GAIgASgJEg8KB3ZlcnNpb24YAyABKAMSDAoEZnJvbRgEIAEoCRIKCgJ0bxgFIAEoCSKlAgoGUmVjb3JkEgoKAmlkGAEgASgJEgsKA3NlcRgCIAEoAxIPCgdzdWJqZWN0GAMgASgJEhAKCGRvY3VtZW50GAQgASgJEg8KB3ZlcnNpb24YBSABKAMSDAoEbGFuZxgGIAEoCRIUCgxjb250ZW50X2hhc2gYByABKAkSDAoEa2luZBgIIAEoCRITCgthY2NlcHRlZF9hdBgJIAEoCRI2Cgdjb250ZXh0GAogAygLMiUubGVnYWwuY29uc29sZS52MS5SZWNvcmQuQ29udGV4dEVudHJ5EhEKCXByZXZfaGFzaBgLIAEoCRIMCgRoYXNoGAwgASgJGi4KDENvbnRleHRFbnRyeRILCgNrZXkYASABKAkSDQoFdmFsdWUYAiABKAk6AjgBIjoKDkpvdXJuYWxSZXF1ZXN0EigKBmZpbHRlchgBIAEoCzIYLmxlZ2FsLmNvbnNvbGUudjEuRmlsdGVyIjwKD0pvdXJuYWxSZXNwb25zZRIpCgdyZWNvcmRzGAEgAygLMhgubGVnYWwuY29uc29sZS52MS5SZWNvcmQiKQoNVmVyaWZ5UmVxdWVzdBIMCgRmcm9tGAEgASgDEgoKAnRvGAIgASgDIkEKDlZlcmlmeVJlc3BvbnNlEgoKAm9rGAEgASgIEhIKCmJyb2tlbl9zZXEYAiABKAMSDwoHY2hlY2tlZBgDIAEoAyJJCg1FeHBvcnRSZXF1ZXN0EigKBmZpbHRlchgBIAEoCzIYLmxlZ2FsLmNvbnNvbGUudjEuRmlsdGVyEg4KBmZvcm1hdBgCIAEoCSJGCg5FeHBvcnRSZXNwb25zZRIMCgRkYXRhGAEgASgMEhQKDGNvbnRlbnRfdHlwZRgCIAEoCRIQCghmaWxlbmFtZRgDIAEoCSIiCg5QcmV2aWV3UmVxdWVzdBIQCghtYXJrZG93bhgBIAEoCSIfCg9QcmV2aWV3UmVzcG9uc2USDAoEaHRtbBgBIAEoCTLtBgoMQWRtaW5TZXJ2aWNlEmAKDUxpc3REb2N1bWVudHMSJi5sZWdhbC5jb25zb2xlLnYxLkxpc3REb2N1bWVudHNSZXF1ZXN0GicubGVnYWwuY29uc29sZS52MS5MaXN0RG9jdW1lbnRzUmVzcG9uc2USYwoOQ3JlYXRlRG9jdW1lbnQSJy5sZWdhbC5jb25zb2xlLnYxLkNyZWF0ZURvY3VtZW50UmVxdWVzdBooLmxlZ2FsLmNvbnNvbGUudjEuQ3JlYXRlRG9jdW1lbnRSZXNwb25zZRJaCgtHZXRWZXJzaW9ucxIkLmxlZ2FsLmNvbnNvbGUudjEuR2V0VmVyc2lvbnNSZXF1ZXN0GiUubGVnYWwuY29uc29sZS52MS5HZXRWZXJzaW9uc1Jlc3BvbnNlElQKCVNhdmVEcmFmdBIiLmxlZ2FsLmNvbnNvbGUudjEuU2F2ZURyYWZ0UmVxdWVzdBojLmxlZ2FsLmNvbnNvbGUudjEuU2F2ZURyYWZ0UmVzcG9uc2USTgoHUHVibGlzaBIgLmxlZ2FsLmNvbnNvbGUudjEuUHVibGlzaFJlcXVlc3QaIS5sZWdhbC5jb25zb2xlLnYxLlB1Ymxpc2hSZXNwb25zZRJOCgdKb3VybmFsEiAubGVnYWwuY29uc29sZS52MS5Kb3VybmFsUmVxdWVzdBohLmxlZ2FsLmNvbnNvbGUudjEuSm91cm5hbFJlc3BvbnNlEksKBlZlcmlmeRIfLmxlZ2FsLmNvbnNvbGUudjEuVmVyaWZ5UmVxdWVzdBogLmxlZ2FsLmNvbnNvbGUudjEuVmVyaWZ5UmVzcG9uc2USSwoGRXhwb3J0Eh8ubGVnYWwuY29uc29sZS52MS5FeHBvcnRSZXF1ZXN0GiAubGVnYWwuY29uc29sZS52MS5FeHBvcnRSZXNwb25zZRJOCgdQcmV2aWV3EiAubGVnYWwuY29uc29sZS52MS5QcmV2aWV3UmVxdWVzdBohLmxlZ2FsLmNvbnNvbGUudjEuUHJldmlld1Jlc3BvbnNlEloKC0dldFNldHRpbmdzEiQubGVnYWwuY29uc29sZS52MS5HZXRTZXR0aW5nc1JlcXVlc3QaJS5sZWdhbC5jb25zb2xlLnYxLkdldFNldHRpbmdzUmVzcG9uc2VCUVpPZ2l0aHViLmNvbS9iYWNrcGxhbmUtbGFicy9iYWNrcGxhbmUtbGVnYWwvcHJvdG8vbGVnYWwvY29uc29sZS92MTtsZWdhbGNvbnNvbGV2MWIGcHJvdG8z");
+
+/**
+ * @generated from message legal.console.v1.GetSettingsRequest
+ */
+export type GetSettingsRequest = Message<"legal.console.v1.GetSettingsRequest"> & {
+};
+
+/**
+ * Describes the message legal.console.v1.GetSettingsRequest.
+ * Use `create(GetSettingsRequestSchema)` to create a new message.
+ */
+export const GetSettingsRequestSchema: GenMessage<GetSettingsRequest> = /*@__PURE__*/
+  messageDesc(file_proto_legal_console_v1_admin, 0);
+
+/**
+ * @generated from message legal.console.v1.GetSettingsResponse
+ */
+export type GetSettingsResponse = Message<"legal.console.v1.GetSettingsResponse"> & {
+  /**
+   * Only required documents: CreateDocument and Publish refuse an optional
+   * one with FAILED_PRECONDITION and ErrorInfo reason REQUIRED_ONLY.
+   *
+   * @generated from field: bool required_only = 1;
+   */
+  requiredOnly: boolean;
+};
+
+/**
+ * Describes the message legal.console.v1.GetSettingsResponse.
+ * Use `create(GetSettingsResponseSchema)` to create a new message.
+ */
+export const GetSettingsResponseSchema: GenMessage<GetSettingsResponse> = /*@__PURE__*/
+  messageDesc(file_proto_legal_console_v1_admin, 1);
 
 /**
  * Document holds stable document policy.
@@ -44,7 +77,7 @@ export type Document = Message<"legal.console.v1.Document"> & {
  * Use `create(DocumentSchema)` to create a new message.
  */
 export const DocumentSchema: GenMessage<Document> = /*@__PURE__*/
-  messageDesc(file_proto_legal_console_v1_admin, 0);
+  messageDesc(file_proto_legal_console_v1_admin, 2);
 
 /**
  * Text is a language's exact evidence text.
@@ -83,7 +116,7 @@ export type Text = Message<"legal.console.v1.Text"> & {
  * Use `create(TextSchema)` to create a new message.
  */
 export const TextSchema: GenMessage<Text> = /*@__PURE__*/
-  messageDesc(file_proto_legal_console_v1_admin, 1);
+  messageDesc(file_proto_legal_console_v1_admin, 3);
 
 /**
  * Version is an editable draft or immutable publication.
@@ -129,7 +162,7 @@ export type Version = Message<"legal.console.v1.Version"> & {
  * Use `create(VersionSchema)` to create a new message.
  */
 export const VersionSchema: GenMessage<Version> = /*@__PURE__*/
-  messageDesc(file_proto_legal_console_v1_admin, 2);
+  messageDesc(file_proto_legal_console_v1_admin, 4);
 
 /**
  * @generated from message legal.console.v1.ListDocumentsRequest
@@ -146,7 +179,7 @@ export type ListDocumentsRequest = Message<"legal.console.v1.ListDocumentsReques
  * Use `create(ListDocumentsRequestSchema)` to create a new message.
  */
 export const ListDocumentsRequestSchema: GenMessage<ListDocumentsRequest> = /*@__PURE__*/
-  messageDesc(file_proto_legal_console_v1_admin, 3);
+  messageDesc(file_proto_legal_console_v1_admin, 5);
 
 /**
  * @generated from message legal.console.v1.ListDocumentsResponse
@@ -163,7 +196,7 @@ export type ListDocumentsResponse = Message<"legal.console.v1.ListDocumentsRespo
  * Use `create(ListDocumentsResponseSchema)` to create a new message.
  */
 export const ListDocumentsResponseSchema: GenMessage<ListDocumentsResponse> = /*@__PURE__*/
-  messageDesc(file_proto_legal_console_v1_admin, 4);
+  messageDesc(file_proto_legal_console_v1_admin, 6);
 
 /**
  * @generated from message legal.console.v1.CreateDocumentRequest
@@ -180,7 +213,7 @@ export type CreateDocumentRequest = Message<"legal.console.v1.CreateDocumentRequ
  * Use `create(CreateDocumentRequestSchema)` to create a new message.
  */
 export const CreateDocumentRequestSchema: GenMessage<CreateDocumentRequest> = /*@__PURE__*/
-  messageDesc(file_proto_legal_console_v1_admin, 5);
+  messageDesc(file_proto_legal_console_v1_admin, 7);
 
 /**
  * @generated from message legal.console.v1.CreateDocumentResponse
@@ -193,7 +226,7 @@ export type CreateDocumentResponse = Message<"legal.console.v1.CreateDocumentRes
  * Use `create(CreateDocumentResponseSchema)` to create a new message.
  */
 export const CreateDocumentResponseSchema: GenMessage<CreateDocumentResponse> = /*@__PURE__*/
-  messageDesc(file_proto_legal_console_v1_admin, 6);
+  messageDesc(file_proto_legal_console_v1_admin, 8);
 
 /**
  * @generated from message legal.console.v1.GetVersionsRequest
@@ -210,7 +243,7 @@ export type GetVersionsRequest = Message<"legal.console.v1.GetVersionsRequest"> 
  * Use `create(GetVersionsRequestSchema)` to create a new message.
  */
 export const GetVersionsRequestSchema: GenMessage<GetVersionsRequest> = /*@__PURE__*/
-  messageDesc(file_proto_legal_console_v1_admin, 7);
+  messageDesc(file_proto_legal_console_v1_admin, 9);
 
 /**
  * @generated from message legal.console.v1.GetVersionsResponse
@@ -227,7 +260,7 @@ export type GetVersionsResponse = Message<"legal.console.v1.GetVersionsResponse"
  * Use `create(GetVersionsResponseSchema)` to create a new message.
  */
 export const GetVersionsResponseSchema: GenMessage<GetVersionsResponse> = /*@__PURE__*/
-  messageDesc(file_proto_legal_console_v1_admin, 8);
+  messageDesc(file_proto_legal_console_v1_admin, 10);
 
 /**
  * @generated from message legal.console.v1.SaveDraftRequest
@@ -244,7 +277,7 @@ export type SaveDraftRequest = Message<"legal.console.v1.SaveDraftRequest"> & {
  * Use `create(SaveDraftRequestSchema)` to create a new message.
  */
 export const SaveDraftRequestSchema: GenMessage<SaveDraftRequest> = /*@__PURE__*/
-  messageDesc(file_proto_legal_console_v1_admin, 9);
+  messageDesc(file_proto_legal_console_v1_admin, 11);
 
 /**
  * @generated from message legal.console.v1.SaveDraftResponse
@@ -261,7 +294,7 @@ export type SaveDraftResponse = Message<"legal.console.v1.SaveDraftResponse"> & 
  * Use `create(SaveDraftResponseSchema)` to create a new message.
  */
 export const SaveDraftResponseSchema: GenMessage<SaveDraftResponse> = /*@__PURE__*/
-  messageDesc(file_proto_legal_console_v1_admin, 10);
+  messageDesc(file_proto_legal_console_v1_admin, 12);
 
 /**
  * @generated from message legal.console.v1.PublishRequest
@@ -283,7 +316,7 @@ export type PublishRequest = Message<"legal.console.v1.PublishRequest"> & {
  * Use `create(PublishRequestSchema)` to create a new message.
  */
 export const PublishRequestSchema: GenMessage<PublishRequest> = /*@__PURE__*/
-  messageDesc(file_proto_legal_console_v1_admin, 11);
+  messageDesc(file_proto_legal_console_v1_admin, 13);
 
 /**
  * @generated from message legal.console.v1.PublishResponse
@@ -300,7 +333,7 @@ export type PublishResponse = Message<"legal.console.v1.PublishResponse"> & {
  * Use `create(PublishResponseSchema)` to create a new message.
  */
 export const PublishResponseSchema: GenMessage<PublishResponse> = /*@__PURE__*/
-  messageDesc(file_proto_legal_console_v1_admin, 12);
+  messageDesc(file_proto_legal_console_v1_admin, 14);
 
 /**
  * Filter uses inclusive RFC 3339 server-time bounds; empty means unbounded.
@@ -339,7 +372,7 @@ export type Filter = Message<"legal.console.v1.Filter"> & {
  * Use `create(FilterSchema)` to create a new message.
  */
 export const FilterSchema: GenMessage<Filter> = /*@__PURE__*/
-  messageDesc(file_proto_legal_console_v1_admin, 13);
+  messageDesc(file_proto_legal_console_v1_admin, 15);
 
 /**
  * Record is one append-only evidence entry.
@@ -413,7 +446,7 @@ export type Record = Message<"legal.console.v1.Record"> & {
  * Use `create(RecordSchema)` to create a new message.
  */
 export const RecordSchema: GenMessage<Record> = /*@__PURE__*/
-  messageDesc(file_proto_legal_console_v1_admin, 14);
+  messageDesc(file_proto_legal_console_v1_admin, 16);
 
 /**
  * @generated from message legal.console.v1.JournalRequest
@@ -430,7 +463,7 @@ export type JournalRequest = Message<"legal.console.v1.JournalRequest"> & {
  * Use `create(JournalRequestSchema)` to create a new message.
  */
 export const JournalRequestSchema: GenMessage<JournalRequest> = /*@__PURE__*/
-  messageDesc(file_proto_legal_console_v1_admin, 15);
+  messageDesc(file_proto_legal_console_v1_admin, 17);
 
 /**
  * @generated from message legal.console.v1.JournalResponse
@@ -447,7 +480,7 @@ export type JournalResponse = Message<"legal.console.v1.JournalResponse"> & {
  * Use `create(JournalResponseSchema)` to create a new message.
  */
 export const JournalResponseSchema: GenMessage<JournalResponse> = /*@__PURE__*/
-  messageDesc(file_proto_legal_console_v1_admin, 16);
+  messageDesc(file_proto_legal_console_v1_admin, 18);
 
 /**
  * @generated from message legal.console.v1.VerifyRequest
@@ -469,7 +502,7 @@ export type VerifyRequest = Message<"legal.console.v1.VerifyRequest"> & {
  * Use `create(VerifyRequestSchema)` to create a new message.
  */
 export const VerifyRequestSchema: GenMessage<VerifyRequest> = /*@__PURE__*/
-  messageDesc(file_proto_legal_console_v1_admin, 17);
+  messageDesc(file_proto_legal_console_v1_admin, 19);
 
 /**
  * @generated from message legal.console.v1.VerifyResponse
@@ -496,7 +529,7 @@ export type VerifyResponse = Message<"legal.console.v1.VerifyResponse"> & {
  * Use `create(VerifyResponseSchema)` to create a new message.
  */
 export const VerifyResponseSchema: GenMessage<VerifyResponse> = /*@__PURE__*/
-  messageDesc(file_proto_legal_console_v1_admin, 18);
+  messageDesc(file_proto_legal_console_v1_admin, 20);
 
 /**
  * @generated from message legal.console.v1.ExportRequest
@@ -520,7 +553,7 @@ export type ExportRequest = Message<"legal.console.v1.ExportRequest"> & {
  * Use `create(ExportRequestSchema)` to create a new message.
  */
 export const ExportRequestSchema: GenMessage<ExportRequest> = /*@__PURE__*/
-  messageDesc(file_proto_legal_console_v1_admin, 19);
+  messageDesc(file_proto_legal_console_v1_admin, 21);
 
 /**
  * @generated from message legal.console.v1.ExportResponse
@@ -547,7 +580,7 @@ export type ExportResponse = Message<"legal.console.v1.ExportResponse"> & {
  * Use `create(ExportResponseSchema)` to create a new message.
  */
 export const ExportResponseSchema: GenMessage<ExportResponse> = /*@__PURE__*/
-  messageDesc(file_proto_legal_console_v1_admin, 20);
+  messageDesc(file_proto_legal_console_v1_admin, 22);
 
 /**
  * @generated from message legal.console.v1.PreviewRequest
@@ -564,7 +597,7 @@ export type PreviewRequest = Message<"legal.console.v1.PreviewRequest"> & {
  * Use `create(PreviewRequestSchema)` to create a new message.
  */
 export const PreviewRequestSchema: GenMessage<PreviewRequest> = /*@__PURE__*/
-  messageDesc(file_proto_legal_console_v1_admin, 21);
+  messageDesc(file_proto_legal_console_v1_admin, 23);
 
 /**
  * @generated from message legal.console.v1.PreviewResponse
@@ -581,7 +614,7 @@ export type PreviewResponse = Message<"legal.console.v1.PreviewResponse"> & {
  * Use `create(PreviewResponseSchema)` to create a new message.
  */
 export const PreviewResponseSchema: GenMessage<PreviewResponse> = /*@__PURE__*/
-  messageDesc(file_proto_legal_console_v1_admin, 22);
+  messageDesc(file_proto_legal_console_v1_admin, 24);
 
 /**
  * AdminService is the internal, operator-authenticated legal console API.
@@ -660,6 +693,16 @@ export const AdminService: GenService<{
     methodKind: "unary";
     input: typeof PreviewRequestSchema;
     output: typeof PreviewResponseSchema;
+  },
+  /**
+   * The installation's document policy, as the console needs it.
+   *
+   * @generated from rpc legal.console.v1.AdminService.GetSettings
+   */
+  getSettings: {
+    methodKind: "unary";
+    input: typeof GetSettingsRequestSchema;
+    output: typeof GetSettingsResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_proto_legal_console_v1_admin, 0);

@@ -5,11 +5,13 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"strings"
 	"testing"
 	"time"
 
 	"github.com/backplane-labs/backplane/pkg/backplane/backplanetest"
+	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -77,6 +79,53 @@ func (c failingCases) Acceptances(context.Context, domain.Filter) ([]domain.Reco
 
 func (c failingCases) Verify(context.Context, int64, int64) (domain.Verification, error) {
 	return domain.Verification{}, c.err
+}
+
+func (c failingCases) RequiredOnly() bool { return c.err != nil }
+
+// An optional document refused by the policy is FAILED_PRECONDITION with the
+// stable reason REQUIRED_ONLY; GetSettings tells the console the policy.
+func TestRequiredOnly(t *testing.T) {
+	t.Parallel()
+
+	h := backplanetest.New(t)
+	adapter := admin.New(h.Root(), failingCases{err: fmt.Errorf("%w: news is optional", domain.ErrRequiredOnly)})
+
+	for name, call := range map[string]func() error{
+		"create": func() error {
+			_, err := adapter.CreateDocument(t.Context(), &legalconsolev1.CreateDocumentRequest{
+				Document: &legalconsolev1.Document{Slug: "news", Audience: "all"},
+			})
+
+			return err
+		},
+		"publish": func() error {
+			_, err := adapter.Publish(t.Context(), &legalconsolev1.PublishRequest{Document: "news", Number: 1})
+
+			return err
+		},
+	} {
+		st := status.Convert(call())
+
+		var info errdetails.ErrorInfo
+
+		for _, detail := range st.Proto().GetDetails() {
+			if detail.MessageIs(&info) && detail.UnmarshalTo(&info) == nil && info.GetDomain() == admin.ErrorDomain {
+				break
+			}
+		}
+
+		reason := info.GetReason()
+
+		if st.Code() != codes.FailedPrecondition || reason != admin.ReasonRequiredOnly {
+			t.Fatalf("%s: %v %q", name, st.Code(), reason)
+		}
+	}
+
+	settings, err := adapter.GetSettings(t.Context(), &legalconsolev1.GetSettingsRequest{})
+	if err != nil || !settings.GetRequiredOnly() {
+		t.Fatalf("settings: %v %v", settings, err)
+	}
 }
 
 func TestErrorMapping(t *testing.T) {

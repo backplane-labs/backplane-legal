@@ -29,8 +29,17 @@ type Config struct {
 	config.Backplane `desc:"Backplane platform connections and lifecycle."         json:"backplane"`
 	Postgres         postgres.Config `desc:"Legal PostgreSQL connection; owns the legal schema."   json:"postgres"`
 	HTTP             HTTPConfig      `desc:"Read-only public HTTP API and document page security." json:"http"`
+	Documents        DocumentsConfig `desc:"What documents the installation allows."               json:"documents"`
 
 	DefaultLang string `desc:"Fallback BCP 47 language." json:"default_lang" schemapb:"default=en"`
+}
+
+// DocumentsConfig is the installation's document policy.
+type DocumentsConfig struct {
+	// RequiredOnly: an optional document (a consent one may decline or
+	// withdraw) is neither created nor published; documents already
+	// published stay, with their evidence.
+	RequiredOnly config.Live[bool] `desc:"Only required documents." json:"required_only" schemapb:"default=false"`
 }
 
 // HTTPConfig controls the public listener and live iframe embedding policy.
@@ -88,7 +97,7 @@ func New(root backplane.Root[Config]) (*State, error) {
 	cfg := root.Config()
 	dep := deps.NewDependency(root, store.New(cfg.Postgres), deps.ProbeTimeout(probeTimeout))
 	repository := store.NewRepository(dep)
-	legal := app.New(repository, cfg.DefaultLang)
+	legal := app.New(repository, cfg.DefaultLang, cfg.Documents.RequiredOnly.Get)
 
 	return &State{
 		Store: dep, Legal: legal,

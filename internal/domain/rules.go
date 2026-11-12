@@ -19,7 +19,11 @@ var (
 	ErrInvalid  = errors.New("invalid legal input")
 	ErrNotFound = errors.New("legal resource not found")
 	ErrConflict = errors.New("legal state conflict")
-	slugPattern = regexp.MustCompile(`^[a-z][a-z0-9-]*$`)
+	// ErrRequiredOnly: the installation allows only required documents
+	// (documents.required_only), so an optional one is neither created nor
+	// published.
+	ErrRequiredOnly = errors.New("optional documents are off in this installation")
+	slugPattern     = regexp.MustCompile(`^[a-z][a-z0-9-]*$`)
 )
 
 const (

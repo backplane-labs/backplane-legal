@@ -20,7 +20,7 @@ func (*failingOutbox) Enqueue(context.Context, string, any) error { return domai
 func testOutboxAtomicity(t *testing.T, service *app.Service, repo *store.Store, item domain.Item) {
 	t.Helper()
 
-	failing := app.New(&failingOutbox{Store: repo}, "en")
+	failing := app.New(&failingOutbox{Store: repo}, "en", app.AnyDocuments)
 	subject := uuid.NewString()
 
 	before, _, err := repo.Head(t.Context())

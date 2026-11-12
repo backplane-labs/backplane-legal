@@ -14,12 +14,30 @@ import (
 
 // Service is immutable; transaction state lives in the repository context.
 type Service struct {
-	repo        port.Repository
-	defaultLang string
+	repo         port.Repository
+	defaultLang  string
+	requiredOnly func() bool
 }
 
-func New(repo port.Repository, defaultLang string) *Service {
-	return &Service{repo: repo, defaultLang: defaultLang}
+// New is the service; requiredOnly reports, at each call, whether the
+// installation allows only required documents.
+func New(repo port.Repository, defaultLang string, requiredOnly func() bool) *Service {
+	return &Service{repo: repo, defaultLang: defaultLang, requiredOnly: requiredOnly}
+}
+
+// AnyDocuments is the policy allowing optional documents too.
+func AnyDocuments() bool { return false }
+
+// RequiredOnly reports whether optional documents are off.
+func (s Service) RequiredOnly() bool { return s.requiredOnly() }
+
+// allowed refuses an optional document while only required ones are on.
+func (s Service) allowed(doc domain.Document) error {
+	if !doc.Required && s.requiredOnly() {
+		return fmt.Errorf("%w: %s is optional", domain.ErrRequiredOnly, doc.Slug)
+	}
+
+	return nil
 }
 
 func (s Service) mutate(ctx context.Context, fn func(context.Context) error) error {
@@ -41,6 +59,10 @@ func (s Service) CreateDocument(ctx context.Context, doc domain.Document) error 
 
 	if err := domain.ValidateDocument(doc); err != nil {
 		return wrap(err)
+	}
+
+	if err := s.allowed(doc); err != nil {
+		return err
 	}
 
 	return wrap(s.repo.CreateDocument(ctx, doc))
@@ -110,6 +132,10 @@ func (s Service) Publish(ctx context.Context, slug string, number int64) (domain
 		doc, err := s.repo.Document(ctx, slug)
 		if err != nil {
 			return wrap(err)
+		}
+
+		if err := s.allowed(doc); err != nil {
+			return err
 		}
 
 		version, err := s.version(ctx, slug, number)

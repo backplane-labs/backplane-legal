@@ -28,6 +28,7 @@ const (
 	AdminService_Verify_FullMethodName         = "/legal.console.v1.AdminService/Verify"
 	AdminService_Export_FullMethodName         = "/legal.console.v1.AdminService/Export"
 	AdminService_Preview_FullMethodName        = "/legal.console.v1.AdminService/Preview"
+	AdminService_GetSettings_FullMethodName    = "/legal.console.v1.AdminService/GetSettings"
 )
 
 // AdminServiceClient is the client API for AdminService service.
@@ -45,6 +46,8 @@ type AdminServiceClient interface {
 	Verify(ctx context.Context, in *VerifyRequest, opts ...grpc.CallOption) (*VerifyResponse, error)
 	Export(ctx context.Context, in *ExportRequest, opts ...grpc.CallOption) (*ExportResponse, error)
 	Preview(ctx context.Context, in *PreviewRequest, opts ...grpc.CallOption) (*PreviewResponse, error)
+	// The installation's document policy, as the console needs it.
+	GetSettings(ctx context.Context, in *GetSettingsRequest, opts ...grpc.CallOption) (*GetSettingsResponse, error)
 }
 
 type adminServiceClient struct {
@@ -145,6 +148,16 @@ func (c *adminServiceClient) Preview(ctx context.Context, in *PreviewRequest, op
 	return out, nil
 }
 
+func (c *adminServiceClient) GetSettings(ctx context.Context, in *GetSettingsRequest, opts ...grpc.CallOption) (*GetSettingsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetSettingsResponse)
+	err := c.cc.Invoke(ctx, AdminService_GetSettings_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AdminServiceServer is the server API for AdminService service.
 // All implementations must embed UnimplementedAdminServiceServer
 // for forward compatibility.
@@ -160,6 +173,8 @@ type AdminServiceServer interface {
 	Verify(context.Context, *VerifyRequest) (*VerifyResponse, error)
 	Export(context.Context, *ExportRequest) (*ExportResponse, error)
 	Preview(context.Context, *PreviewRequest) (*PreviewResponse, error)
+	// The installation's document policy, as the console needs it.
+	GetSettings(context.Context, *GetSettingsRequest) (*GetSettingsResponse, error)
 	mustEmbedUnimplementedAdminServiceServer()
 }
 
@@ -196,6 +211,9 @@ func (UnimplementedAdminServiceServer) Export(context.Context, *ExportRequest) (
 }
 func (UnimplementedAdminServiceServer) Preview(context.Context, *PreviewRequest) (*PreviewResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Preview not implemented")
+}
+func (UnimplementedAdminServiceServer) GetSettings(context.Context, *GetSettingsRequest) (*GetSettingsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetSettings not implemented")
 }
 func (UnimplementedAdminServiceServer) mustEmbedUnimplementedAdminServiceServer() {}
 func (UnimplementedAdminServiceServer) testEmbeddedByValue()                      {}
@@ -380,6 +398,24 @@ func _AdminService_Preview_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AdminService_GetSettings_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSettingsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServiceServer).GetSettings(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AdminService_GetSettings_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServiceServer).GetSettings(ctx, req.(*GetSettingsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AdminService_ServiceDesc is the grpc.ServiceDesc for AdminService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -422,6 +458,10 @@ var AdminService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Preview",
 			Handler:    _AdminService_Preview_Handler,
+		},
+		{
+			MethodName: "GetSettings",
+			Handler:    _AdminService_GetSettings_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
