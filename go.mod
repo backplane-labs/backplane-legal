@@ -3,7 +3,7 @@ module github.com/backplane-labs/backplane-legal
 go 1.27.4
 
 require (
-	github.com/backplane-labs/backplane v0.6.88
+	github.com/backplane-labs/backplane v0.6.90
 	github.com/google/uuid v1.6.0
 	github.com/gopherex/pgtx v1.1.5
 	github.com/gopherex/xlog v1.2.1
@@ -58,7 +58,7 @@ require (
 	github.com/gopherex/xshutdown v1.1.0 // indirect
 	github.com/gopherex/xtrace v1.1.6 // indirect
 	github.com/gopherex/xtrace/contrib/libs/xlog v1.1.6 // indirect
-	github.com/gopherex/xtrace/contrib/sdk v1.1.6 // indirect
+	github.com/gopherex/xtrace/contrib/sdk v1.2.0 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.2 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.29.0 // indirect
