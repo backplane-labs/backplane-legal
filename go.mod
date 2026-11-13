@@ -1,9 +1,9 @@
 module github.com/backplane-labs/backplane-legal
 
-go 1.26.0
+go 1.27.4
 
 require (
-	github.com/backplane-labs/backplane v0.6.80
+	github.com/backplane-labs/backplane v0.6.82
 	github.com/google/uuid v1.6.0
 	github.com/gopherex/pgtx v1.1.2
 	github.com/gopherex/xlog v1.2.1

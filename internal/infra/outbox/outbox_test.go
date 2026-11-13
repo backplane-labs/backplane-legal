@@ -20,7 +20,9 @@ type source struct {
 func (s *source) PendingEvents(_ context.Context, _ int32) ([]domain.Event, error) {
 	return s.events, nil
 }
+
 func (s *source) AckEvent(_ context.Context, id int64) error { s.ack = append(s.ack, id); return nil }
+
 func TestPublishBeforeAck(t *testing.T) {
 	t.Parallel()
 	h := backplanetest.New(t, backplanetest.Name("legal"))

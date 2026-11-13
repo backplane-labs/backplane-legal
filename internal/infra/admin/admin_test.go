@@ -65,6 +65,7 @@ func (c failingCases) Documents(context.Context, string) ([]domain.Document, err
 }
 func (c failingCases) CreateDocument(context.Context, domain.Document) error      { return c.err }
 func (c failingCases) Versions(context.Context, string) ([]domain.Version, error) { return nil, c.err }
+
 func (c failingCases) SaveDraft(context.Context, domain.Version) (domain.Version, error) {
 	return domain.Version{}, c.err
 }
