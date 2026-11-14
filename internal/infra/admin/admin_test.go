@@ -182,3 +182,55 @@ func TestInvalidRequests(t *testing.T) {
 		t.Fatalf("oversize preview: %v", err)
 	}
 }
+
+// listedCases holds documents and their versions; everything else fails.
+type listedCases struct {
+	failingCases
+
+	docs     []domain.Document
+	versions map[string][]domain.Version
+}
+
+func (c listedCases) Documents(context.Context, string) ([]domain.Document, error) {
+	return c.docs, nil
+}
+
+func (c listedCases) Versions(_ context.Context, slug string) ([]domain.Version, error) {
+	return c.versions[slug], nil
+}
+
+// ListDocuments names the version in effect now: none for drafts or a
+// publication effective later, the newest effective publication otherwise.
+func TestListDocumentsCurrentVersion(t *testing.T) {
+	t.Parallel()
+
+	now := time.Now()
+	published := func(n int64, at time.Time) domain.Version {
+		return domain.Version{Number: n, Status: domain.Published, EffectiveAt: at}
+	}
+
+	h := backplanetest.New(t)
+	adapter := admin.New(h.Root(), listedCases{
+		failingCases: failingCases{err: errors.New("unexpected application call")},
+		docs: []domain.Document{
+			{Slug: "terms", Required: true}, {Slug: "privacy", Required: true}, {Slug: "offer", Required: true},
+		},
+		versions: map[string][]domain.Version{
+			"terms":   {published(1, now.Add(-2*time.Hour)), published(2, now.Add(-time.Hour)), {Number: 3, Status: domain.Draft}},
+			"privacy": {{Number: 1, Status: domain.Draft}},
+			"offer":   {published(1, now.Add(time.Hour))},
+		},
+	})
+
+	got, err := adapter.ListDocuments(t.Context(), &legalconsolev1.ListDocumentsRequest{})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	want := map[string]int64{"terms": 2, "privacy": 0, "offer": 0}
+	for _, doc := range got.GetDocuments() {
+		if doc.GetCurrentVersion() != want[doc.GetSlug()] {
+			t.Fatalf("%s: current version %d, want %d", doc.GetSlug(), doc.GetCurrentVersion(), want[doc.GetSlug()])
+		}
+	}
+}

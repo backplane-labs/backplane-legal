@@ -105,13 +105,17 @@ func (x *GetSettingsResponse) GetRequiredOnly() bool {
 
 // Document holds stable document policy.
 type Document struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Slug          string                 `protobuf:"bytes,1,opt,name=slug,proto3" json:"slug,omitempty"`
-	Audience      string                 `protobuf:"bytes,2,opt,name=audience,proto3" json:"audience,omitempty"`
-	Required      bool                   `protobuf:"varint,3,opt,name=required,proto3" json:"required,omitempty"`
-	DefaultLang   string                 `protobuf:"bytes,4,opt,name=default_lang,json=defaultLang,proto3" json:"default_lang,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state       protoimpl.MessageState `protogen:"open.v1"`
+	Slug        string                 `protobuf:"bytes,1,opt,name=slug,proto3" json:"slug,omitempty"`
+	Audience    string                 `protobuf:"bytes,2,opt,name=audience,proto3" json:"audience,omitempty"`
+	Required    bool                   `protobuf:"varint,3,opt,name=required,proto3" json:"required,omitempty"`
+	DefaultLang string                 `protobuf:"bytes,4,opt,name=default_lang,json=defaultLang,proto3" json:"default_lang,omitempty"`
+	// Version in effect now (published, effective date reached); 0 when
+	// none: only drafts, or a publication effective later. Set by
+	// ListDocuments.
+	CurrentVersion int64 `protobuf:"varint,5,opt,name=current_version,json=currentVersion,proto3" json:"current_version,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *Document) Reset() {
@@ -170,6 +174,13 @@ func (x *Document) GetDefaultLang() string {
 		return x.DefaultLang
 	}
 	return ""
+}
+
+func (x *Document) GetCurrentVersion() int64 {
+	if x != nil {
+		return x.CurrentVersion
+	}
+	return 0
 }
 
 // Text is a language's exact evidence text.
@@ -1393,12 +1404,13 @@ const file_proto_legal_console_v1_admin_proto_rawDesc = "" +
 	"\"proto/legal/console/v1/admin.proto\x12\x10legal.console.v1\"\x14\n" +
 	"\x12GetSettingsRequest\":\n" +
 	"\x13GetSettingsResponse\x12#\n" +
-	"\rrequired_only\x18\x01 \x01(\bR\frequiredOnly\"y\n" +
+	"\rrequired_only\x18\x01 \x01(\bR\frequiredOnly\"\xa2\x01\n" +
 	"\bDocument\x12\x12\n" +
 	"\x04slug\x18\x01 \x01(\tR\x04slug\x12\x1a\n" +
 	"\baudience\x18\x02 \x01(\tR\baudience\x12\x1a\n" +
 	"\brequired\x18\x03 \x01(\bR\brequired\x12!\n" +
-	"\fdefault_lang\x18\x04 \x01(\tR\vdefaultLang\"y\n" +
+	"\fdefault_lang\x18\x04 \x01(\tR\vdefaultLang\x12'\n" +
+	"\x0fcurrent_version\x18\x05 \x01(\x03R\x0ecurrentVersion\"y\n" +
 	"\x04Text\x12\x12\n" +
 	"\x04lang\x18\x01 \x01(\tR\x04lang\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x12\x12\n" +

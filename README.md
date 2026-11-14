@@ -64,11 +64,11 @@ The HTML response disallows scripts, forms and remote resources through Content 
 
 ## Console and internal API
 
-The console module lets operators create document policy, edit drafts by language, preview Markdown with the server's renderer, publish with confirmation and inspect publication hashes and version history. It also provides journal filters, CSV/JSON downloads and chain verification. The internal gRPC contract is `legal.console.v1.AdminService` in `proto/legal/console/v1/admin.proto`.
+The console module lets operators create document policy, edit drafts by language, preview Markdown with the server's renderer, publish with confirmation and inspect publication hashes and version history. It also provides journal filters, CSV/JSON downloads and chain verification. The document list shows each document's version in effect and warns, across every audience, about unmet obligations: it names each required document with no version in effect (only drafts, or a publication effective later). When `documents.required_only` is on and no required document is in effect, it says that nobody is asked to accept anything. The internal gRPC contract is `legal.console.v1.AdminService` in `proto/legal/console/v1/admin.proto`.
 
 | RPCs | Purpose |
 | --- | --- |
-| `ListDocuments`, `CreateDocument` | Document policy, including documents without a publication. |
+| `ListDocuments`, `CreateDocument` | Document policy, including documents without a publication; `current_version` is the version in effect now, `0` when none. |
 | `GetVersions`, `SaveDraft`, `Publish`, `Preview` | Draft lifecycle, publication history and sanitized preview. |
 | `Journal`, `Export` | Filter by subject, document, version and inclusive server-time bounds `from`/`to` in RFC 3339. Export returns bytes, content type and filename through the authenticated console relay. |
 | `Verify` | `{from?, to?}` sequence bounds; returns `{ok, broken_seq, checked}`. Zero bounds select the beginning/end. |

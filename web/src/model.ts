@@ -37,3 +37,16 @@ export function textEvidence(version: Version | undefined, language: string): st
   const text = version?.texts.find((text) => text.lang === language);
   return text ? `# ${text.title}\n\n${text.body}\n\nExternal URL: ${text.url}` : '';
 }
+/** A document as the obligations warning needs it. */
+export interface Obligation { slug: string; required: boolean; currentVersion: bigint }
+/**
+ * What the console warns about: the required documents with no version in effect, and whether no
+ * required document is in effect at all while the installation allows only required ones.
+ */
+export function obligations(documents: readonly Obligation[], requiredOnly: boolean): { missing: string[]; noneInEffect: boolean } {
+  const required = documents.filter((document) => document.required);
+  return {
+    missing: required.filter((document) => document.currentVersion === 0n).map((document) => document.slug),
+    noneInEffect: requiredOnly && !required.some((document) => document.currentVersion > 0n),
+  };
+}

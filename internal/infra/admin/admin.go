@@ -58,7 +58,8 @@ func (a *Admin) GetSettings(
 	return &legalconsolev1.GetSettingsResponse{RequiredOnly: a.cases.RequiredOnly()}, nil
 }
 
-// ListDocuments includes documents that have no published version yet.
+// ListDocuments includes documents that have no published version yet;
+// each names the version in effect now, 0 when none.
 func (a *Admin) ListDocuments(
 	ctx context.Context,
 	req *legalconsolev1.ListDocumentsRequest,
@@ -68,13 +69,26 @@ func (a *Admin) ListDocuments(
 		return nil, a.failure(err)
 	}
 
+	now := time.Now()
 	out := &legalconsolev1.ListDocumentsResponse{}
+
 	for _, doc := range docs {
+		versions, err := a.cases.Versions(ctx, doc.Slug)
+		if err != nil {
+			return nil, a.failure(err)
+		}
+
+		var inEffect int64
+		if current, err := domain.Current(versions, now); err == nil {
+			inEffect = current.Number
+		}
+
 		out.Documents = append(out.Documents, &legalconsolev1.Document{
-			Slug:        doc.Slug,
-			Audience:    doc.Audience,
-			Required:    doc.Required,
-			DefaultLang: doc.DefaultLang,
+			Slug:           doc.Slug,
+			Audience:       doc.Audience,
+			Required:       doc.Required,
+			DefaultLang:    doc.DefaultLang,
+			CurrentVersion: inEffect,
 		})
 	}
 

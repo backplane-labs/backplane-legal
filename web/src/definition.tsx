@@ -5,10 +5,10 @@ import { useClient } from '@backplane-labs/backplane-react';
 import { definePlugin, usePluginContext, usePluginNavigate } from '@backplane-labs/backplane-plugin-sdk';
 import { ConnectionNotice, usePlatformQuery, usePlatformAction } from '@backplane-labs/backplane-platform-ui';
 import { CodeEditor, DiffViewer } from '@backplane-labs/backplane-editors';
-import { Badge, Button, Checkbox, ConfirmAction, EmptyState, Field, FieldLabel, Input, PageHeader, Panel, SelectControl, Stack, StatusBadge, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Textarea } from '@backplane-labs/backplane-ui';
+import { Alert, AlertDescription, AlertTitle, Badge, Button, Checkbox, ConfirmAction, EmptyState, Field, FieldLabel, Input, PageHeader, Panel, SelectControl, Stack, StatusBadge, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Textarea } from '@backplane-labs/backplane-ui';
 import { AdminServiceClient } from './gen/proto/legal/console/v1/admin_ws_pb';
 import { CreateDocumentRequestSchema, DocumentSchema, ExportRequestSchema, FilterSchema, GetSettingsRequestSchema, GetVersionsRequestSchema, JournalRequestSchema, ListDocumentsRequestSchema, PreviewRequestSchema, PublishRequestSchema, SaveDraftRequestSchema, TextSchema, VerifyRequestSchema, VersionSchema, type Document, type Version, type Text, type Filter } from './gen/proto/legal/console/v1/admin_pb';
-import { canonicalLanguage, instant, localDate, positiveInteger, textEvidence, validateVersion } from './model';
+import { canonicalLanguage, instant, localDate, obligations, positiveInteger, textEvidence, validateVersion } from './model';
 import navigation from './navigation';
 import './legal.css';
 
@@ -45,9 +45,32 @@ function Documents() {
   const [audience, setAudience] = useState('');
   const query = useRead(`legal:documents:${audience}`, (signal) => client.listDocuments(create(ListDocumentsRequestSchema, { audience }), { signal }));
   return <Frame title="Legal documents" description="Manage publication and preserve the exact text people accept." actions={<Actions><Button size="sm" variant="outline" disabled={query.loading} onClick={query.refresh}>Refresh</Button><Button size="sm" onClick={() => navigate('new')}>Create document</Button></Actions>}>
+    <ObligationsWarning requiredOnly={requiredOnly} />
     <FormField label="Audience"><SelectControl aria-label="Filter audience" value={audience} onValueChange={setAudience} options={[{ value: '', label: 'All audiences' }, { value: 'all', label: 'All users' }, { value: 'registration', label: 'Registration only' }]} /></FormField>
-    <ReadState query={query} /><Panel title="Documents" count={query.value?.documents.length} flush>{query.value && (query.value.documents.length ? <div className="legal-table"><Table><TableHeader><TableRow><TableHead>Document</TableHead><TableHead>Audience</TableHead><TableHead>Policy</TableHead><TableHead>Default language</TableHead><TableHead>Versions</TableHead></TableRow></TableHeader><TableBody>{query.value.documents.map((document) => <TableRow key={document.slug}><TableCell><code>{document.slug}</code></TableCell><TableCell>{document.audience === 'all' ? 'All users' : 'Registration'}</TableCell><TableCell><PolicyBadge required={document.required} requiredOnly={requiredOnly} /></TableCell><TableCell>{document.defaultLang}</TableCell><TableCell><Button size="sm" variant="outline" onClick={() => navigate(`documents/${encodeURIComponent(document.slug)}`)}>Open history</Button></TableCell></TableRow>)}</TableBody></Table></div> : <EmptyState title="No documents in this audience" action={<Button size="sm" onClick={() => navigate('new')}>Create document</Button>} />)}</Panel>
+    <ReadState query={query} /><Panel title="Documents" count={query.value?.documents.length} flush>{query.value && (query.value.documents.length ? <div className="legal-table"><Table><TableHeader><TableRow><TableHead>Document</TableHead><TableHead>Audience</TableHead><TableHead>Policy</TableHead><TableHead>Default language</TableHead><TableHead>In effect</TableHead><TableHead>Versions</TableHead></TableRow></TableHeader><TableBody>{query.value.documents.map((document) => <TableRow key={document.slug}><TableCell><code>{document.slug}</code></TableCell><TableCell>{document.audience === 'all' ? 'All users' : 'Registration'}</TableCell><TableCell><PolicyBadge required={document.required} requiredOnly={requiredOnly} /></TableCell><TableCell>{document.defaultLang}</TableCell><TableCell><InEffect document={document} /></TableCell><TableCell><Button size="sm" variant="outline" onClick={() => navigate(`documents/${encodeURIComponent(document.slug)}`)}>Open history</Button></TableCell></TableRow>)}</TableBody></Table></div> : <EmptyState title="No documents in this audience" action={<Button size="sm" onClick={() => navigate('new')}>Create document</Button>} />)}</Panel>
   </Frame>;
+}
+/**
+ * The installation's legal obligations not met, across every audience: required documents with no
+ * version in effect, and no required document in effect at all while only required ones are allowed.
+ */
+function ObligationsWarning({ requiredOnly }: { requiredOnly: boolean }) {
+  const client = useClient(AdminServiceClient);
+  const all = useRead('legal:documents:', (signal) => client.listDocuments(create(ListDocumentsRequestSchema, { audience: '' }), { signal }));
+  if (!all.value) return null;
+  const { missing, noneInEffect } = obligations(all.value.documents, requiredOnly);
+  if (!noneInEffect && !missing.length) return null;
+  return <Alert variant="destructive">
+    <AlertTitle>{noneInEffect ? 'No required legal documents are in effect' : 'Required documents are not in effect'}</AlertTitle>
+    <AlertDescription>{missing.length
+      ? <>Publish a version of {missing.map((slug, i) => <span key={slug}>{i ? ', ' : ''}<code>{slug}</code></span>)}: until one is in effect, nobody is asked to accept it.</>
+      : 'This installation allows only required documents and none has a version in effect: nobody is asked to accept anything. Create a required document and publish it.'}</AlertDescription>
+  </Alert>;
+}
+/** The version of a document in effect now; a required one with none is flagged. */
+function InEffect({ document }: { document: Document }) {
+  if (document.currentVersion > 0n) return <StatusBadge tone="success">v{String(document.currentVersion)}</StatusBadge>;
+  return document.required ? <StatusBadge tone="warning">None</StatusBadge> : <span>None</span>;
 }
 /** Whether the installation allows only required documents (documents.required_only). */
 function useRequiredOnly(): boolean {

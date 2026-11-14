@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { canonicalLanguage, instant, localDate, positiveInteger, textEvidence, validateVersion } from './model.ts';
+import { canonicalLanguage, instant, localDate, obligations, positiveInteger, textEvidence, validateVersion } from './model.ts';
 
 const version = () => ({ document: 'privacy', number: 1n, effectiveAt: '2026-10-23T12:00:00Z', status: 'draft', changeNote: '', texts: [{ lang: 'en', title: 'Privacy', body: 'Our policy', url: '', contentHash: '' }] });
 test('canonical BCP 47 tags reject invalid languages', () => {
@@ -42,4 +42,13 @@ test('local date conversions preserve the selected instant to minute precision',
   assert.equal(instant(localDate(date)), new Date(date).toISOString());
   assert.equal(localDate('bad'), '');
   assert.throws(() => instant('bad'));
+});
+test('obligations name required documents with no version in effect', () => {
+  const doc = (slug, required, currentVersion) => ({ slug, required, currentVersion });
+  assert.deepEqual(obligations([], false), { missing: [], noneInEffect: false });
+  assert.deepEqual(obligations([], true), { missing: [], noneInEffect: true });
+  assert.deepEqual(obligations([doc('terms', true, 2n), doc('privacy', true, 0n), doc('news', false, 0n)], true),
+    { missing: ['privacy'], noneInEffect: false });
+  assert.deepEqual(obligations([doc('privacy', true, 0n), doc('news', false, 3n)], true), { missing: ['privacy'], noneInEffect: true });
+  assert.deepEqual(obligations([doc('news', false, 0n)], false), { missing: [], noneInEffect: false });
 });

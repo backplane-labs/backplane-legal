@@ -28,6 +28,10 @@ message Document {
   string audience = 2;
   bool required = 3;
   string default_lang = 4;
+  // Version in effect now (published, effective date reached); 0 when
+  // none: only drafts, or a publication effective later. Set by
+  // ListDocuments.
+  int64 current_version = 5;
 }
 // Text is a language's exact evidence text.
 message Text {
