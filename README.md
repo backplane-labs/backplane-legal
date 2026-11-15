@@ -172,7 +172,7 @@ Set `BACKPLANE_CONFIG_FILE` to load a YAML file. Backplane's own settings use `B
 
 ## Development
 
-Go tool versions match the reference services: golangci-lint `v2.11.3`, sqld `v1.1.10`, easyp `v0.16.6`, protoc-gen-go `v1.36.11` and protoc-gen-go-grpc `v1.6.2`. Tools install into `bin/`; use Node 22 and Yarn Classic `1.22.22`. Console packages require GitHub Packages read access.
+Go tool versions match the reference services: golangci-lint `v2.11.3`, sqld `v1.1.10`, easyp `v0.16.6`, protoc-gen-go `v1.36.11` and protoc-gen-go-grpc `v1.6.2`. Tools install into `bin/`; use Node 22 and Yarn 4 (`corepack enable`; the version is pinned by `packageManager`). Console packages require GitHub Packages read access.
 
 ```sh
 make configure configure-web configure-events

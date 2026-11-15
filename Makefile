@@ -51,15 +51,15 @@ configure: ## Install the pinned linter, sqld and proto generators into ./bin
 
 .PHONY: configure-web
 configure-web: ## Install the console module's dependencies (GitHub Packages: see web/README.md)
-	cd web && $(NODE_ENV) yarn install --frozen-lockfile
+	cd web && $(NODE_ENV) yarn install --immutable
 
 .PHONY: configure-events
 configure-events: ## Install the event package dependencies
-	cd events && $(NODE_ENV) npm ci
+	cd events && $(NODE_ENV) yarn install --immutable
 
 .PHONY: events
 events: ## Build the generated TypeScript event payload package
-	cd events && $(NODE_ENV) npm run build
+	cd events && $(NODE_ENV) yarn build
 
 .PHONY: gen
 gen: ## Generate the internal API: Go stubs and the module's TypeScript client
