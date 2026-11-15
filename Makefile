@@ -53,6 +53,10 @@ configure: ## Install the pinned linter, sqld and proto generators into ./bin
 configure-web: ## Install the console module's dependencies (GitHub Packages: see web/README.md)
 	cd web && $(NODE_ENV) yarn install --immutable
 
+.PHONY: lint-web
+lint-web: ## Lint and format-check the console module (Biome)
+	cd web && $(NODE_ENV) yarn lint
+
 .PHONY: configure-events
 configure-events: ## Install the event package dependencies
 	cd events && $(NODE_ENV) yarn install --immutable

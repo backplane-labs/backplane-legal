@@ -1,4 +1,4 @@
-export default {
+export const english = {
   legal: 'Documents',
   journal: 'Acceptance journal',
   standalone: 'Standalone',

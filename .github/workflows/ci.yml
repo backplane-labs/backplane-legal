@@ -58,7 +58,7 @@ jobs:
       - run: make lint
       - run: make db && git diff --exit-code -- internal/store/db internal/store/migrations
       - run: make gen && git diff --exit-code -- proto web/src/gen events/src
-      - run: cd web && env -u HTTPS_PROXY -u HTTP_PROXY -u https_proxy -u http_proxy yarn typecheck
+      - run: cd web && yarn lint && yarn typecheck
       - run: make web events build
       - run: go vet ./...
       - run: go test -race -count=1 ./...

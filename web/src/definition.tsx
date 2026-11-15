@@ -64,8 +64,10 @@ import navigation from './navigation';
 import './legal.css';
 
 type Client = InstanceType<typeof AdminServiceClient>;
-const errorText = (error: unknown) => (error instanceof Error ? error.message : String(error));
-function ErrorNotice({ error }: { error: unknown }) {
+/** The raw value a platform hook kept from a rejection, named from the hook's own contract. */
+type PlatformError = ReturnType<typeof usePlatformQuery<string>>['error'];
+const errorText = (error: PlatformError) => (error instanceof Error ? error.message : String(error));
+function ErrorNotice({ error }: { error: PlatformError }) {
   return error == null ? null : (
     <div role="alert" className="legal-error">
       {errorText(error)}
@@ -119,7 +121,7 @@ function useRead<T>(key: string, read: (signal: AbortSignal) => Promise<T>) {
 function ReadState({
   query,
 }: {
-  query: { loading: boolean; error: unknown; cancel: () => void; refresh: () => void };
+  query: { loading: boolean; error: PlatformError; cancel: () => void; refresh: () => void };
 }) {
   return (
     <>
@@ -143,7 +145,7 @@ function ReadState({
 function ActionState({
   action,
 }: {
-  action: { pending: boolean; cancelled: boolean; error: unknown; cancel: () => void };
+  action: { pending: boolean; cancelled: boolean; error: PlatformError; cancel: () => void };
 }) {
   return (
     <>
@@ -434,10 +436,14 @@ function NewDocument() {
                   {requiredOnly ? (
                     <span>Required acceptance: this installation allows only required documents.</span>
                   ) : (
-                    <label className="legal-check">
-                      <Checkbox checked={required} onCheckedChange={(value) => setRequired(value === true)} /> Required
-                      acceptance
-                    </label>
+                    <span className="legal-check">
+                      <Checkbox
+                        id="legal-required"
+                        checked={required}
+                        onCheckedChange={(value) => setRequired(value === true)}
+                      />
+                      <label htmlFor="legal-required">Required acceptance</label>
+                    </span>
                   )}
                 </FormField>
               </div>
@@ -698,21 +704,23 @@ function VersionEditor({
   onDirty: (dirty: boolean) => void;
 }) {
   const mode = usePluginContext().mode;
-  const [version, setVersion] = useState<Version>(() =>
-    fresh
-      ? create(VersionSchema, {
-          document: document.slug,
-          number: 0n,
-          status: 'draft',
-          effectiveAt: new Date().toISOString(),
-          texts: source
-            ? source.texts.map((text) =>
-                create(TextSchema, { lang: text.lang, title: text.title, body: text.body, url: text.url }),
-              )
-            : [create(TextSchema, { lang: document.defaultLang })],
-        })
-      : clone(VersionSchema, source!),
-  );
+  const [version, setVersion] = useState<Version>(() => {
+    if (!fresh) {
+      if (source === undefined) throw new Error('VersionEditor requires a source version when not fresh');
+      return clone(VersionSchema, source);
+    }
+    return create(VersionSchema, {
+      document: document.slug,
+      number: 0n,
+      status: 'draft',
+      effectiveAt: new Date().toISOString(),
+      texts: source
+        ? source.texts.map((text) =>
+            create(TextSchema, { lang: text.lang, title: text.title, body: text.body, url: text.url }),
+          )
+        : [create(TextSchema, { lang: document.defaultLang })],
+    });
+  });
   const [date, setDate] = useState(localDate(version.effectiveAt)),
     [language, setLanguage] = useState(version.texts[0]?.lang ?? document.defaultLang),
     [adding, setAdding] = useState('');

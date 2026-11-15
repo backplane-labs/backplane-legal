@@ -23,30 +23,28 @@ import '@fontsource/ibm-plex-mono/400.css';
 import './standalone.css';
 
 const i18n = i18next.createInstance();
-await i18n
-  .use(initReactI18next)
-  .init({
-    lng: 'en',
-    fallbackLng: 'en',
-    supportedLngs: ['en'],
-    interpolation: { escapeValue: false },
-    resources: {
-      en: {
-        'backplane.ui': englishResources,
-        'backplane.editors': editorsEnglish,
-        'backplane.platform': platformEnglish,
-      },
+await i18n.use(initReactI18next).init({
+  lng: 'en',
+  fallbackLng: 'en',
+  supportedLngs: ['en'],
+  interpolation: { escapeValue: false },
+  resources: {
+    en: {
+      'backplane.ui': englishResources,
+      'backplane.editors': editorsEnglish,
+      'backplane.platform': platformEnglish,
     },
-  });
+  },
+});
 installPluginTranslations(i18n, navigation);
 const client = new BackplaneClient();
 function Session() {
   const state = useSyncExternalStore(client.subscribe, client.getSnapshot),
     [token, setToken] = useState(''),
     [pending, setPending] = useState(false),
-    [error, setError] = useState<unknown>();
+    [error, setError] = useState<Error>();
   useEffect(() => {
-    void client.start().catch(setError);
+    void client.start().catch((reason) => setError(reason instanceof Error ? reason : new Error(String(reason))));
     return () => client.dispose();
   }, []);
   if (state.session)
@@ -72,7 +70,7 @@ function Session() {
             void client
               .login(token)
               .then(() => setToken(''))
-              .catch(setError)
+              .catch((reason) => setError(reason instanceof Error ? reason : new Error(String(reason))))
               .finally(() => setPending(false));
           }}
         >
@@ -130,7 +128,9 @@ function Standalone() {
     </ThemeContext.Provider>
   );
 }
-createRoot(document.getElementById('root')!).render(
+const container = document.getElementById('root');
+if (container === null) throw new Error('standalone: #root element not found');
+createRoot(container).render(
   <I18nextProvider i18n={i18n}>
     <BrowserRouter>
       <Standalone />
