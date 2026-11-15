@@ -1,7 +1,11 @@
 import type { Version } from './gen/proto/legal/console/v1/admin_pb';
 
 export function canonicalLanguage(value: string): string {
-  try { return Intl.getCanonicalLocales(value.trim())[0] ?? ''; } catch { return ''; }
+  try {
+    return Intl.getCanonicalLocales(value.trim())[0] ?? '';
+  } catch {
+    return '';
+  }
 }
 export function localDate(value: string): string {
   const date = new Date(value);
@@ -15,21 +19,28 @@ export function instant(value: string): string {
 }
 export function positiveInteger(value: string, label: string): bigint {
   if (!value.trim()) return 0n;
-  if (!/^[1-9]\d*$/.test(value) || BigInt(value) > 9223372036854775807n) throw new Error(`${label} must be a positive 64-bit integer.`);
+  if (!/^[1-9]\d*$/.test(value) || BigInt(value) > 9223372036854775807n)
+    throw new Error(`${label} must be a positive 64-bit integer.`);
   return BigInt(value);
 }
 export function validateVersion(version: Version, defaultLang: string): string | undefined {
-  if (!version.effectiveAt || !Number.isFinite(new Date(version.effectiveAt).getTime())) return 'Enter a valid effective date and time.';
+  if (!version.effectiveAt || !Number.isFinite(new Date(version.effectiveAt).getTime()))
+    return 'Enter a valid effective date and time.';
   if (!version.texts.length) return 'Add at least one language.';
   const languages = version.texts.map((text) => canonicalLanguage(text.lang));
-  if (languages.some((lang) => !lang) || new Set(languages).size !== languages.length) return 'Each language must be a unique BCP 47 language tag.';
+  if (languages.some((lang) => !lang) || new Set(languages).size !== languages.length)
+    return 'Each language must be a unique BCP 47 language tag.';
   if (!languages.includes(defaultLang)) return `Include the default language (${defaultLang}).`;
   for (const text of version.texts) {
     if (!text.title.trim()) return `Enter a title for ${text.lang}.`;
     if (!text.body.trim() && !text.url.trim()) return `Enter Markdown or an external URL for ${text.lang}.`;
     if (text.url) {
-      try { const url = new URL(text.url); if (!['http:', 'https:'].includes(url.protocol)) return `Use an HTTP or HTTPS URL for ${text.lang}.`; }
-      catch { return `Enter a valid external URL for ${text.lang}.`; }
+      try {
+        const url = new URL(text.url);
+        if (!['http:', 'https:'].includes(url.protocol)) return `Use an HTTP or HTTPS URL for ${text.lang}.`;
+      } catch {
+        return `Enter a valid external URL for ${text.lang}.`;
+      }
     }
   }
 }
@@ -38,12 +49,19 @@ export function textEvidence(version: Version | undefined, language: string): st
   return text ? `# ${text.title}\n\n${text.body}\n\nExternal URL: ${text.url}` : '';
 }
 /** A document as the obligations warning needs it. */
-export interface Obligation { slug: string; required: boolean; currentVersion: bigint }
+export interface Obligation {
+  slug: string;
+  required: boolean;
+  currentVersion: bigint;
+}
 /**
  * What the console warns about: the required documents with no version in effect, and whether no
  * required document is in effect at all while the installation allows only required ones.
  */
-export function obligations(documents: readonly Obligation[], requiredOnly: boolean): { missing: string[]; noneInEffect: boolean } {
+export function obligations(
+  documents: readonly Obligation[],
+  requiredOnly: boolean,
+): { missing: string[]; noneInEffect: boolean } {
   const required = documents.filter((document) => document.required);
   return {
     missing: required.filter((document) => document.currentVersion === 0n).map((document) => document.slug),
