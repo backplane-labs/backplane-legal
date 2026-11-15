@@ -64,11 +64,10 @@ import navigation from './navigation';
 import './legal.css';
 
 type Client = InstanceType<typeof AdminServiceClient>;
-/** The raw value a platform hook kept from a rejection, named from the hook's own contract. */
-type PlatformError = ReturnType<typeof usePlatformQuery<string>>['error'];
-const errorText = (error: PlatformError) => (error instanceof Error ? error.message : String(error));
-function ErrorNotice({ error }: { error: PlatformError }) {
-  return error == null ? null : (
+/** A failure's text: a platform hook's Error or a validation message. */
+const errorText = (error: Error | string) => (typeof error === 'string' ? error : error.message);
+function ErrorNotice({ error }: { error: Error | string | undefined }) {
+  return error === undefined ? null : (
     <div role="alert" className="legal-error">
       {errorText(error)}
     </div>
@@ -121,7 +120,7 @@ function useRead<T>(key: string, read: (signal: AbortSignal) => Promise<T>) {
 function ReadState({
   query,
 }: {
-  query: { loading: boolean; error: PlatformError; cancel: () => void; refresh: () => void };
+  query: { loading: boolean; error: Error | undefined; cancel: () => void; refresh: () => void };
 }) {
   return (
     <>
@@ -145,7 +144,7 @@ function ReadState({
 function ActionState({
   action,
 }: {
-  action: { pending: boolean; cancelled: boolean; error: PlatformError; cancel: () => void };
+  action: { pending: boolean; cancelled: boolean; error: Error | undefined; cancel: () => void };
 }) {
   return (
     <>
@@ -772,7 +771,7 @@ function VersionEditor({
         onSaved(result);
       }
     } catch (error) {
-      setValidation(errorText(error));
+      setValidation(error instanceof Error ? error.message : String(error));
     }
   }
   function addLanguage() {
@@ -987,7 +986,6 @@ function VersionEditor({
                 Save draft
               </Button>
               <ConfirmAction
-                disabled={action.disabled || fresh || dirty || !!invalid || blocked}
                 trigger={
                   <Button variant="outline" disabled={action.disabled || fresh || dirty || !!invalid || blocked}>
                     Publish version
@@ -1059,7 +1057,7 @@ function Journal() {
       );
       setValidation(undefined);
     } catch (error) {
-      setValidation(errorText(error));
+      setValidation(error instanceof Error ? error.message : String(error));
     }
   };
   async function download(format: 'csv' | 'json') {
@@ -1091,7 +1089,7 @@ function Journal() {
         to,
       }));
     } catch (error) {
-      setVerifyValidation(errorText(error));
+      setVerifyValidation(error instanceof Error ? error.message : String(error));
     }
   }
   return (
